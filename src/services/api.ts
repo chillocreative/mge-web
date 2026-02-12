@@ -134,6 +134,30 @@ export interface ContactFormData {
 }
 
 // ============================================================
+// HELPERS
+// ============================================================
+
+function decodeHtmlEntities(text: string): string {
+    return text
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#0?39;/g, "'")
+        .replace(/&apos;/g, "'");
+}
+
+function decodeFields<T>(item: T, fields: (keyof T)[]): T {
+    const result = { ...item };
+    for (const field of fields) {
+        if (typeof result[field] === "string") {
+            (result[field] as string) = decodeHtmlEntities(result[field] as string);
+        }
+    }
+    return result;
+}
+
+// ============================================================
 // API SERVICE
 // ============================================================
 
@@ -144,7 +168,9 @@ export const apiService = {
     async getServices(params?: { per_page?: number; page?: number }): Promise<PaginatedResponse<Service> | null> {
         try {
             const response = await mgeClient.get("/services", { params });
-            return response.data;
+            const data = response.data as PaginatedResponse<Service>;
+            data.data = data.data.map((s) => decodeFields(s, ["title", "description", "excerpt", "short_description"]));
+            return data;
         } catch (error) {
             return handleApiError(error as AxiosError);
         }
@@ -161,7 +187,9 @@ export const apiService = {
     }): Promise<PaginatedResponse<Project> | null> {
         try {
             const response = await mgeClient.get("/projects", { params });
-            return response.data;
+            const data = response.data as PaginatedResponse<Project>;
+            data.data = data.data.map((p) => decodeFields(p, ["title", "description", "excerpt", "category", "client", "scope"]));
+            return data;
         } catch (error) {
             return handleApiError(error as AxiosError);
         }
@@ -178,7 +206,9 @@ export const apiService = {
     }): Promise<PaginatedResponse<GalleryItem> | null> {
         try {
             const response = await mgeClient.get("/gallery", { params });
-            return response.data;
+            const data = response.data as PaginatedResponse<GalleryItem>;
+            data.data = data.data.map((g) => decodeFields(g, ["title", "caption"]));
+            return data;
         } catch (error) {
             return handleApiError(error as AxiosError);
         }
