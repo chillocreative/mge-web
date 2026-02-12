@@ -22,9 +22,6 @@ const Footer = () => {
                         <p className="text-neutral-400 text-sm leading-relaxed">
                             Certified CIDB G7 & PKK Class 'A' engineering firm specializing in large-scale infrastructure and industrial solutions across Malaysia.
                         </p>
-                        <div className="p-3 bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-accent">
-                            CIDB G7 & PKK Class 'A' Certified
-                        </div>
                     </div>
 
                     {/* Quick Links */}
