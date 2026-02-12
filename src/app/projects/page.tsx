@@ -43,6 +43,7 @@ const ProjectsPage = async () => {
                     projects={projects.map((p) => ({
                         id: p.id,
                         title: p.title,
+                        slug: p.slug,
                         category: p.category,
                         location: p.location,
                         year: p.year,
