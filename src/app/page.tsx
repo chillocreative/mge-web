@@ -6,17 +6,19 @@ import Section from "@/components/layout/Section";
 import Heading from "@/components/ui/Heading";
 import ServiceCard from "@/components/modules/ServiceCard";
 import Link from "next/link";
-import { ArrowUpRight, Activity } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { apiService } from "@/services/api";
 
 export default async function Home() {
-  const [servicesResponse, projectsResponse] = await Promise.all([
+  const [servicesResponse, projectsResponse, galleryResponse] = await Promise.all([
     apiService.getServices({ per_page: 6 }).catch(() => null),
-    apiService.getProjects({ featured: "true", per_page: 4 }).catch(() => null),
+    apiService.getProjects({ per_page: 4 }).catch(() => null),
+    apiService.getGallery({ per_page: 8 }).catch(() => null),
   ]);
 
   const services = servicesResponse?.data ?? [];
   const projects = projectsResponse?.data ?? [];
+  const gallery = galleryResponse?.data ?? [];
 
   return (
     <main className="min-h-screen">
@@ -108,17 +110,18 @@ export default async function Home() {
         </div>
       </Section>
 
-      {/* Featured Projects Section */}
-      {projects.length > 0 && (
-        <Section variant="industrial" className="border-t border-industrial">
-          <div className="text-center mb-16">
-            <span className="text-accent font-bold uppercase tracking-[0.3em] text-xs">Visual Portfolio</span>
-            <Heading level={2} className="mt-4 uppercase">Featured <span className="text-accent italic">Projects</span></Heading>
-          </div>
+      {/* Projects & Gallery Section */}
+      <Section variant="industrial" className="border-t border-industrial">
+        <div className="text-center mb-16">
+          <span className="text-accent font-bold uppercase tracking-[0.3em] text-xs">Visual Portfolio</span>
+          <Heading level={2} className="mt-4 uppercase">Project <span className="text-accent italic">Gallery</span></Heading>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Project Cards */}
+        {projects.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {projects.map((project) => (
-              <div key={project.id} className="aspect-square bg-white relative overflow-hidden group cursor-pointer border border-industrial">
+              <Link key={project.id} href="/projects" className="aspect-video bg-white relative overflow-hidden group cursor-pointer border border-industrial block">
                 {project.featured_image && (
                   <div
                     className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500"
@@ -131,53 +134,39 @@ export default async function Home() {
                     <h3 className="text-xl font-bold font-heading text-white">{project.title}</h3>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
+        )}
 
-          <div className="mt-12 text-center">
-            <Link
-              href="/projects"
-              className="text-xs font-bold uppercase tracking-[0.2em] text-primary hover:text-accent border-b-2 border-accent pb-2 transition-all"
-            >
-              View Full Gallery
-            </Link>
-          </div>
-        </Section>
-      )}
-
-      {/* Fallback gallery when no projects from API */}
-      {projects.length === 0 && (
-        <Section variant="industrial" className="border-t border-industrial">
-          <div className="text-center mb-16">
-            <span className="text-accent font-bold uppercase tracking-[0.3em] text-xs">Visual Portfolio</span>
-            <Heading level={2} className="mt-4 uppercase">Project <span className="text-accent italic">Gallery</span></Heading>
-          </div>
-
+        {/* Gallery Thumbnails */}
+        {gallery.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="aspect-square bg-white relative overflow-hidden group cursor-pointer border border-industrial">
-                <div
-                  className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500"
-                  style={{ backgroundImage: `url('https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=600&sig=${i}')` }}
-                />
+            {gallery.map((item) => (
+              <Link key={item.id} href="/projects" className="aspect-square bg-white relative overflow-hidden group cursor-pointer border border-industrial block">
+                {item.image && (
+                  <div
+                    className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500"
+                    style={{ backgroundImage: `url('${item.image.medium || item.image.url}')` }}
+                  />
+                )}
                 <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Activity className="text-white w-8 h-8" />
+                  <ArrowUpRight className="text-white w-8 h-8" />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
+        )}
 
-          <div className="mt-12 text-center">
-            <Link
-              href="/projects"
-              className="text-xs font-bold uppercase tracking-[0.2em] text-primary hover:text-accent border-b-2 border-accent pb-2 transition-all"
-            >
-              View Full Gallery
-            </Link>
-          </div>
-        </Section>
-      )}
+        <div className="mt-12 text-center">
+          <Link
+            href="/projects"
+            className="text-xs font-bold uppercase tracking-[0.2em] text-primary hover:text-accent border-b-2 border-accent pb-2 transition-all"
+          >
+            View Full Gallery
+          </Link>
+        </div>
+      </Section>
 
       <Footer />
     </main>
