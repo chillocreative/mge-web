@@ -49,6 +49,7 @@ const ServicesPage = async () => {
                             icon={service.icon}
                             href={`/services/${service.slug}`}
                             index={index}
+                            featuredImage={service.featured_image}
                         />
                     ))}
                 </div>
