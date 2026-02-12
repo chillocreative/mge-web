@@ -6,6 +6,7 @@ import Heading from "@/components/ui/Heading";
 import { constructMetadata } from "@/lib/metadata";
 import { ArrowUpRight } from "lucide-react";
 import { apiService } from "@/services/api";
+import GalleryLightbox from "@/components/modules/GalleryLightbox";
 
 export const metadata = constructMetadata({
     title: "Our Engineering Projects | Multi Green Engineering",
@@ -71,18 +72,16 @@ const ProjectsPage = async () => {
                 <p className="text-neutral-600 mb-12 max-w-2xl mx-auto">
                     A visual deep-dive into our construction sites and completed engineering milestones across the southern region.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {gallery.map((item) => (
-                        <div key={item.id} className="aspect-square bg-white border border-industrial overflow-hidden group relative">
-                            {item.image && (
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center grayscale opacity-80 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500"
-                                    style={{ backgroundImage: `url('${item.image.medium || item.image.url}')` }}
-                                />
-                            )}
-                        </div>
-                    ))}
-                </div>
+                <GalleryLightbox
+                    images={gallery
+                        .filter((item) => item.image)
+                        .map((item) => ({
+                            id: item.id,
+                            title: item.title,
+                            url: item.image!.medium || item.image!.url,
+                            large: item.image!.large || item.image!.url,
+                        }))}
+                />
             </Section>
 
             <Footer />
