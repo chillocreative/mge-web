@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Don't rewrite WordPress CMS paths
+RewriteRule ^cms(/|$) - [L]
+
+# Rewrite all other requests to out/ directory
+RewriteCond %{REQUEST_URI} !^/out/
+RewriteRule ^(.*)$ out/$1 [L]
+
+# Custom 404
+ErrorDocument 404 /out/404.html
