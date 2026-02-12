@@ -35,6 +35,12 @@ define( 'NONCE_SALT',        'o~%=nX4h*6:WJGX0kVmQJdeMP*34exbqTP6/B[a.>a>b7ojaXY
 $table_prefix = 'mge_';
 
 // ============================================================
+// WORDPRESS URL (overrides database values)
+// ============================================================
+define( 'WP_HOME', 'https://mge-eng.com/cms' );
+define( 'WP_SITEURL', 'https://mge-eng.com/cms' );
+
+// ============================================================
 // HEADLESS CMS CONFIGURATION
 // ============================================================
 
