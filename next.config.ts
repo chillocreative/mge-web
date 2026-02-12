@@ -1,16 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
+  trailingSlash: true,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
-        // Local WordPress (Laragon - same domain, /cms subfolder)
+        protocol: "https",
+        hostname: "mge-eng.com",
+        pathname: "/cms/wp-content/uploads/**",
+      },
+      {
         protocol: "http",
         hostname: "mge-website.test",
         pathname: "/cms/wp-content/uploads/**",
       },
       {
-        // Unsplash (existing placeholder images)
         protocol: "https",
         hostname: "images.unsplash.com",
       },

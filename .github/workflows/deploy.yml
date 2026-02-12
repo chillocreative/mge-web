@@ -15,18 +15,38 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm run build
 
-      - name: Deploy via FTP
+      - name: Build Next.js static export
+        run: npm run build
+        env:
+          NEXT_PUBLIC_WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
+
+      - name: Deploy frontend to public_html
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          local-dir: ./out/
+          state-name: .frontend-deploy-state.json
           exclude: |
             **/.git*
             **/.git*/**
-            **/node_modules/**
-            **/cms/**
-            **/.env*
+
+      - name: Deploy WordPress CMS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}cms/
+          local-dir: ./cms/
+          state-name: .cms-deploy-state.json
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/wp-config.php
+            **/wp-content/uploads/**
+            **/wp-content/upgrade/**
+            **/wp-content/cache/**

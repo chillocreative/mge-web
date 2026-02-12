@@ -1,0 +1,11 @@
+/*
+Theme Name: MGE Headless
+Theme URI: https://mge-engineering.com
+Author: MGE Engineering Sdn Bhd
+Description: Minimal headless theme for MGE Engineering WordPress CMS backend. This theme disables frontend rendering and redirects all traffic to the Next.js frontend.
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 8.0
+License: Private
+Text Domain: mge-headless
+*/

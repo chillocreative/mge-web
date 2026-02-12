@@ -41,8 +41,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# WordPress CMS (local dev only)
-/cms/
+# WordPress CMS - exclude sensitive / runtime files
+/cms/wp-config.php
+/cms/wp-content/uploads/
+/cms/wp-content/upgrade/
+/cms/wp-content/cache/
 
 # Windows artifacts
 nul
