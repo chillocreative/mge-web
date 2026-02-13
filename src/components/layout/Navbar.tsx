@@ -69,7 +69,7 @@ const Navbar = () => {
                     ))}
                     <div className="flex items-center gap-4">
                         <a
-                            href="https://pm.mge-eng.com"
+                            href="https://app.mge-eng.com"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-accent text-white px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-accent-hover transition-all duration-300"
@@ -109,7 +109,7 @@ const Navbar = () => {
                             ))}
                             <div className="flex flex-col gap-4 mt-8">
                                 <a
-                                    href="https://pm.mge-eng.com"
+                                    href="https://app.mge-eng.com"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-accent text-white py-4 text-center font-bold uppercase tracking-widest hover:bg-accent-hover"
