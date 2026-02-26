@@ -28,6 +28,7 @@ require_once MGE_HEADLESS_PATH . 'includes/acf-fields.php';
 require_once MGE_HEADLESS_PATH . 'includes/rest-api.php';
 require_once MGE_HEADLESS_PATH . 'includes/cors.php';
 require_once MGE_HEADLESS_PATH . 'includes/security.php';
+require_once MGE_HEADLESS_PATH . 'includes/webhook.php';
 
 /**
  * Plugin activation hook.
