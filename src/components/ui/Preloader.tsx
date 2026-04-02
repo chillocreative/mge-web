@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Activity } from "lucide-react";
 import { usePathname } from "next/navigation";
+
+const letters = ["M", "G", "E"];
 
 const Preloader = () => {
     const [loading, setLoading] = useState(true);
@@ -29,34 +30,38 @@ const Preloader = () => {
                     className="fixed inset-0 z-[9999] flex items-center justify-center bg-primary"
                 >
                     <div className="flex flex-col items-center">
+                        <div className="flex items-center mb-6">
+                            {letters.map((letter, i) => (
+                                <motion.span
+                                    key={letter}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: i * 0.2,
+                                        ease: "easeOut",
+                                    }}
+                                    className="text-7xl font-black text-accent tracking-wider"
+                                    style={{ fontFamily: "var(--font-heading, sans-serif)" }}
+                                >
+                                    {letter}
+                                </motion.span>
+                            ))}
+                        </div>
                         <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{
-                                duration: 0.5,
-                                repeat: Infinity,
-                                repeatType: "reverse",
-                            }}
-                            className="bg-accent p-6 rounded-sm mb-6 shadow-2xl shadow-accent/20"
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: 1 }}
+                            transition={{ duration: 1.8, delay: 0.6, ease: "easeInOut" }}
+                            className="h-0.5 w-32 bg-accent/60 origin-left mb-4"
+                        />
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 1.0 }}
+                            className="text-white/50 text-[10px] uppercase tracking-[0.5em] font-bold"
                         >
-                            <Activity className="w-12 h-12 text-white" />
-                        </motion.div>
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: "200px" }}
-                            transition={{ duration: 2.0, ease: "linear" }}
-                            className="h-1 bg-accent/30 relative overflow-hidden rounded-full"
-                        >
-                            <motion.div
-                                className="absolute inset-0 bg-accent"
-                                initial={{ x: "-100%" }}
-                                animate={{ x: 0 }}
-                                transition={{ duration: 2.0, ease: "linear" }}
-                            />
-                        </motion.div>
-                        <p className="mt-4 text-white/50 text-[10px] uppercase tracking-[0.5em] font-bold">
                             Engineering Precision
-                        </p>
+                        </motion.p>
                     </div>
                 </motion.div>
             )}
