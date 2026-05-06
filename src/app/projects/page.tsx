@@ -20,54 +20,6 @@ interface TableProject {
     date: string;
 }
 
-const fallbackCurrentProjects: TableProject[] = [
-    {
-        slug: "",
-        name: "Menyiapkan Baki Kerja Rancangan Tebatan Banjir (RTB) Lembangan Sungai Muar",
-        client: "Jabatan Pengairan dan Saliran Malaysia",
-        amount: "288,000,000.00",
-        date: "31.10.2025 - 31.10.2027",
-    },
-];
-
-const fallbackPreviousProjects: TableProject[] = [
-    {
-        slug: "",
-        name: "Projek Pembangunan Lembangan Sungai Bersepadu Sungai Golok (KESBAN) Fasa 1",
-        client: "Bina Mekar Sdn Bhd",
-        amount: "380,856,741.00",
-        date: "01.06.2018 - 31.06.2024",
-    },
-    {
-        slug: "",
-        name: "Rancangan Tebatan Banjir (RTB) Lembangan Sungai Muar, Johor",
-        client: "Bina Mekar Sdn Bhd",
-        amount: "134,970,834.00",
-        date: "06.05.2019 - 18.10.2024",
-    },
-    {
-        slug: "",
-        name: "Cadangan Kerja-Kerja Membina Dan Menyiapkan Jalan Baru Dari Kampung Belukar Durian Ke Persimpangan Felda Waha",
-        client: "Bina Mekar Sdn Bhd",
-        amount: "51,137,192.89",
-        date: "24.10.2017 - 23.10.2019",
-    },
-    {
-        slug: "",
-        name: "Projek Menaiktaraf Jalan Muar - Tangkak – Segamat, Johor (Fasa 1 : Segamat-Tangkak) - Pakej 3",
-        client: "Bina Mekar Sdn Bhd",
-        amount: "134,629,116.00",
-        date: "01.09.2016 - 09.12.2019",
-    },
-    {
-        slug: "",
-        name: "Projek Menaiktaraf Jalan Muar-Tangkak-Segamat, Johor (Fasa: Segamat-Tangkak) Pakej 2",
-        client: "Bina Mekar Sdn Bhd",
-        amount: "119,308,367.50",
-        date: "14.03.2012 - 30.07.2015",
-    },
-];
-
 const toTableProject = (p: Project): TableProject => ({
     slug: p.slug,
     name: p.title,
@@ -93,19 +45,24 @@ const ProjectRow = ({ project }: { project: TableProject }) => (
     </tr>
 );
 
+const EmptyRow = ({ label }: { label: string }) => (
+    <tr>
+        <td colSpan={4} className="py-8 px-6 text-center text-sm text-gray-500 italic">
+            {label}
+        </td>
+    </tr>
+);
+
 const ProjectsPage = async () => {
     const projectsRes = await apiService.getProjects({ per_page: 100 });
     const allProjects = projectsRes?.data ?? [];
 
-    const cmsCurrent = allProjects
+    const currentProjects = allProjects
         .filter((p) => p.status === "in_progress" || p.status === "upcoming")
         .map(toTableProject);
-    const cmsPrevious = allProjects
+    const previousProjects = allProjects
         .filter((p) => p.status === "completed")
         .map(toTableProject);
-
-    const currentProjects = cmsCurrent.length ? cmsCurrent : fallbackCurrentProjects;
-    const previousProjects = cmsPrevious.length ? cmsPrevious : fallbackPreviousProjects;
 
     return (
         <main className="min-h-screen bg-gray-50">
@@ -136,7 +93,9 @@ const ProjectsPage = async () => {
                             </tr>
                         </thead>
                         <tbody className="text-gray-800">
-                            {currentProjects.map((p, i) => <ProjectRow key={`curr-${i}`} project={p} />)}
+                            {currentProjects.length > 0
+                                ? currentProjects.map((p, i) => <ProjectRow key={`curr-${i}`} project={p} />)
+                                : <EmptyRow label="No current projects yet." />}
                         </tbody>
                     </table>
                 </div>
@@ -155,7 +114,9 @@ const ProjectsPage = async () => {
                             </tr>
                         </thead>
                         <tbody className="text-gray-800">
-                            {previousProjects.map((p, i) => <ProjectRow key={`prev-${i}`} project={p} />)}
+                            {previousProjects.length > 0
+                                ? previousProjects.map((p, i) => <ProjectRow key={`prev-${i}`} project={p} />)
+                                : <EmptyRow label="No previous projects yet." />}
                         </tbody>
                     </table>
                 </div>

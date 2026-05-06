@@ -71,3 +71,53 @@ function mge_register_project_taxonomy() {
 }
 
 add_action( 'init', 'mge_register_project_taxonomy' );
+
+/**
+ * Add a "Bucket" column to the Projects admin list showing whether
+ * each project lands in the Current or Previous table on the frontend.
+ */
+add_filter( 'manage_mge_project_posts_columns', function ( $columns ) {
+    $new = array();
+    foreach ( $columns as $key => $label ) {
+        $new[ $key ] = $label;
+        if ( $key === 'title' ) {
+            $new['mge_bucket'] = 'Bucket';
+            $new['mge_status'] = 'Status';
+        }
+    }
+    return $new;
+});
+
+add_action( 'manage_mge_project_posts_custom_column', function ( $column, $post_id ) {
+    if ( $column !== 'mge_bucket' && $column !== 'mge_status' ) {
+        return;
+    }
+
+    $status = function_exists( 'get_field' )
+        ? get_field( 'project_status', $post_id )
+        : get_post_meta( $post_id, 'project_status', true );
+
+    if ( ! $status ) {
+        $status = 'in_progress';
+    }
+
+    $is_current = in_array( $status, array( 'in_progress', 'upcoming' ), true );
+
+    $status_labels = array(
+        'in_progress' => 'In Progress',
+        'upcoming'    => 'Upcoming',
+        'completed'   => 'Completed',
+    );
+
+    if ( $column === 'mge_bucket' ) {
+        $color = $is_current ? '#15803d' : '#6b7280';
+        $label = $is_current ? 'Current' : 'Previous';
+        printf(
+            '<span style="display:inline-block;padding:2px 8px;border-radius:3px;background:%s;color:#fff;font-size:11px;font-weight:600;">%s</span>',
+            esc_attr( $color ),
+            esc_html( $label )
+        );
+    } elseif ( $column === 'mge_status' ) {
+        echo esc_html( $status_labels[ $status ] ?? $status );
+    }
+}, 10, 2 );

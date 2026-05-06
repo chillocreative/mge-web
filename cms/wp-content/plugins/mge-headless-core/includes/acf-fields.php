@@ -160,12 +160,13 @@ function mge_register_acf_fields() {
                 'label'         => 'Status',
                 'name'          => 'project_status',
                 'type'          => 'select',
+                'instructions'  => 'Choose where this project appears on the Projects page. "Current" projects show in the Current Projects table; "Previous" projects show in the Previous Projects table.',
                 'choices'       => array(
-                    'completed'   => 'Completed',
-                    'in_progress' => 'In Progress',
-                    'upcoming'    => 'Upcoming',
+                    'in_progress' => 'Current — In Progress',
+                    'upcoming'    => 'Current — Upcoming',
+                    'completed'   => 'Previous — Completed',
                 ),
-                'default_value' => 'completed',
+                'default_value' => 'in_progress',
             ),
             array(
                 'key'           => 'field_project_featured',
