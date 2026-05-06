@@ -71,6 +71,7 @@ const ContactPage = () => {
                                 <div>
                                     <h4 className="font-bold text-gray-800 uppercase text-xs tracking-widest mb-1">Email Inquiry</h4>
                                     <p className="text-gray-600 leading-relaxed font-bold">multigreenengineering@gmail.com</p>
+                                    <p className="text-gray-600 leading-relaxed font-bold">general@mge-eng.com</p>
                                 </div>
                             </div>
                         </div>
