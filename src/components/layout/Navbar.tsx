@@ -33,7 +33,7 @@ const Navbar = () => {
         <nav
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                scrolled ? "bg-white shadow-lg py-3" : "bg-transparent py-6"
+                scrolled ? "bg-industrial shadow-md py-3" : "bg-industrial shadow-sm py-6"
             )}
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
@@ -41,10 +41,10 @@ const Navbar = () => {
                 <Link href="/" className="flex items-center gap-2 group">
                     <Image src="/logo.png" alt="Multi Green Engineering Logo" width={50} height={50} />
                     <div className="flex flex-col">
-                        <span className={cn("text-xl font-bold font-heading leading-tight transition-colors duration-300", scrolled ? "text-gray-800" : "text-white")}>
+                        <span className="text-xl font-bold font-heading leading-tight text-gray-800">
                             MULTI GREEN <span className="text-primary-green">ENGINEERING</span>
                         </span>
-                        <span className={cn("text-[10px] tracking-[0.2em] uppercase font-semibold transition-colors duration-300", scrolled ? "text-gray-600" : "text-white/60")}>
+                        <span className="text-[10px] tracking-[0.2em] uppercase font-semibold text-gray-600">
                             Building Construction & Civil Works
                         </span>
                     </div>
@@ -57,10 +57,8 @@ const Navbar = () => {
                             key={link.name}
                             href={link.href}
                             className={cn(
-                                "text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-accent-yellow",
-                                scrolled
-                                    ? (pathname === link.href ? "text-primary-green" : "text-gray-800/70")
-                                    : (pathname === link.href ? "text-accent-yellow" : "text-white/80")
+                                "text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-primary-green",
+                                pathname === link.href ? "text-primary-green" : "text-gray-800/70"
                             )}
                         >
                             {link.name}
@@ -79,7 +77,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Toggle */}
-                <button className={cn("lg:hidden transition-colors duration-300", scrolled ? "text-gray-800" : "text-white")} onClick={() => setIsOpen(!isOpen)}>
+                <button className="lg:hidden text-gray-800" onClick={() => setIsOpen(!isOpen)}>
                     {isOpen ? <X /> : <Menu />}
                 </button>
             </div>
