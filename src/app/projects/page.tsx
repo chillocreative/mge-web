@@ -17,7 +17,8 @@ interface TableProject {
     name: string;
     client: string;
     amount: string;
-    date: string;
+    startDate: string;
+    completionDate: string;
 }
 
 const toTableProject = (p: Project): TableProject => ({
@@ -25,7 +26,8 @@ const toTableProject = (p: Project): TableProject => ({
     name: p.title,
     client: p.client,
     amount: p.value,
-    date: p.year,
+    startDate: p.start_date,
+    completionDate: p.year,
 });
 
 const ProjectRow = ({ project }: { project: TableProject }) => (
@@ -41,13 +43,14 @@ const ProjectRow = ({ project }: { project: TableProject }) => (
         </td>
         <td className="py-4 px-6 text-sm text-gray-600">{project.client}</td>
         <td className="py-4 px-6 text-sm text-gray-600 text-right">{project.amount}</td>
-        <td className="py-4 px-6 text-sm text-gray-600 whitespace-nowrap">{project.date}</td>
+        <td className="py-4 px-6 text-sm text-gray-600 whitespace-nowrap">{project.startDate || "—"}</td>
+        <td className="py-4 px-6 text-sm text-gray-600 whitespace-nowrap">{project.completionDate}</td>
     </tr>
 );
 
 const EmptyRow = ({ label }: { label: string }) => (
     <tr>
-        <td colSpan={4} className="py-8 px-6 text-center text-sm text-gray-500 italic">
+        <td colSpan={5} className="py-8 px-6 text-center text-sm text-gray-500 italic">
             {label}
         </td>
     </tr>
@@ -89,7 +92,8 @@ const ProjectsPage = async () => {
                                 <th className="py-3 px-6 text-left">Project Name</th>
                                 <th className="py-3 px-6 text-left">Client</th>
                                 <th className="py-3 px-6 text-right">Amount (RM)</th>
-                                <th className="py-3 px-6 text-left">Date</th>
+                                <th className="py-3 px-6 text-left">Start Date</th>
+                                <th className="py-3 px-6 text-left">Completion Date</th>
                             </tr>
                         </thead>
                         <tbody className="text-gray-800">
@@ -110,7 +114,8 @@ const ProjectsPage = async () => {
                                 <th className="py-3 px-6 text-left">Project Name</th>
                                 <th className="py-3 px-6 text-left">Client</th>
                                 <th className="py-3 px-6 text-right">Amount (RM)</th>
-                                <th className="py-3 px-6 text-left">Date</th>
+                                <th className="py-3 px-6 text-left">Start Date</th>
+                                <th className="py-3 px-6 text-left">Completion Date</th>
                             </tr>
                         </thead>
                         <tbody className="text-gray-800">

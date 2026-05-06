@@ -74,9 +74,10 @@ function mge_register_rest_fields() {
             }
 
             return array(
-                'location'  => $fields['project_location'] ?? '',
-                'year'      => $fields['project_year'] ?? '',
-                'client'    => $fields['project_client'] ?? '',
+                'location'   => $fields['project_location'] ?? '',
+                'start_date' => $fields['project_start_date'] ?? '',
+                'year'       => $fields['project_year'] ?? '',
+                'client'     => $fields['project_client'] ?? '',
                 'value'     => $fields['project_value'] ?? '',
                 'scope'     => $fields['project_scope'] ?? '',
                 'gallery'   => $gallery,
@@ -356,6 +357,7 @@ function mge_api_get_projects( WP_REST_Request $request ) {
             'category'       => ! is_wp_error( $terms ) ? ( $terms[0] ?? '' ) : '',
             'categories'     => ! is_wp_error( $terms ) ? $terms : array(),
             'location'       => $fields['project_location'] ?? '',
+            'start_date'     => $fields['project_start_date'] ?? '',
             'year'           => $fields['project_year'] ?? '',
             'client'         => $fields['project_client'] ?? '',
             'value'          => $fields['project_value'] ?? '',

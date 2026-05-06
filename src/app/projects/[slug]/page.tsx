@@ -9,10 +9,12 @@ import { ArrowLeft, MapPin, Calendar, Briefcase, DollarSign, FileText, Tag } fro
 import { apiService, Project } from "@/services/api";
 import GalleryLightbox from "@/components/modules/GalleryLightbox";
 
+// Only render paths from generateStaticParams; skip route entirely if API is unreachable
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const response = await apiService.getProjects({ per_page: 100 }).catch(() => null);
-  const projects = response?.data ?? [];
-  return projects.map((project) => ({ slug: project.slug }));
+  return (response?.data ?? []).map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -44,7 +46,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   const details = [
     { icon: MapPin, label: "Location", value: project.location },
-    { icon: Calendar, label: "Year", value: project.year },
+    { icon: Calendar, label: "Start Date", value: project.start_date },
+    { icon: Calendar, label: "Completion Date", value: project.year },
     { icon: Tag, label: "Category", value: project.category },
     { icon: Briefcase, label: "Client", value: project.client },
     { icon: DollarSign, label: "Project Value (RM)", value: project.value },

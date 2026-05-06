@@ -89,6 +89,7 @@ export interface Project {
     category: string;
     categories: string[];
     location: string;
+    start_date: string;
     year: string;
     client: string;
     value: string;

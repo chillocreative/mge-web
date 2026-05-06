@@ -115,11 +115,18 @@ function mge_register_acf_fields() {
                 'required'      => 1,
             ),
             array(
+                'key'           => 'field_project_start_date',
+                'label'         => 'Start Date',
+                'name'          => 'project_start_date',
+                'type'          => 'text',
+                'instructions'  => 'When the project started (e.g. "01.06.2018" or "June 2018").',
+            ),
+            array(
                 'key'           => 'field_project_year',
-                'label'         => 'Year',
+                'label'         => 'Completion Date',
                 'name'          => 'project_year',
                 'type'          => 'text',
-                'instructions'  => 'Project completion year.',
+                'instructions'  => 'When the project finished or is expected to finish (e.g. "31.10.2027" or "2027").',
                 'required'      => 1,
             ),
             array(
