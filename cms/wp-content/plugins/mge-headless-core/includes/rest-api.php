@@ -54,21 +54,23 @@ function mge_register_rest_fields() {
                 return array();
             }
 
-            // Process gallery images
+            // Process gallery images (5 individual image slots — gallery_1..gallery_5)
             $gallery = array();
-            if ( ! empty( $fields['project_gallery'] ) && is_array( $fields['project_gallery'] ) ) {
-                foreach ( $fields['project_gallery'] as $image ) {
-                    $gallery[] = array(
-                        'id'        => $image['id'] ?? 0,
-                        'url'       => $image['url'] ?? '',
-                        'alt'       => $image['alt'] ?? '',
-                        'width'     => $image['width'] ?? 0,
-                        'height'    => $image['height'] ?? 0,
-                        'thumbnail' => $image['sizes']['thumbnail'] ?? '',
-                        'medium'    => $image['sizes']['medium'] ?? '',
-                        'large'     => $image['sizes']['large'] ?? '',
-                    );
+            foreach ( array( 'gallery_1', 'gallery_2', 'gallery_3', 'gallery_4', 'gallery_5' ) as $slot ) {
+                $image = $fields[ $slot ] ?? null;
+                if ( ! $image || ! is_array( $image ) ) {
+                    continue;
                 }
+                $gallery[] = array(
+                    'id'        => $image['id'] ?? 0,
+                    'url'       => $image['url'] ?? '',
+                    'alt'       => $image['alt'] ?? '',
+                    'width'     => $image['width'] ?? 0,
+                    'height'    => $image['height'] ?? 0,
+                    'thumbnail' => $image['sizes']['thumbnail'] ?? '',
+                    'medium'    => $image['sizes']['medium'] ?? '',
+                    'large'     => $image['sizes']['large'] ?? '',
+                );
             }
 
             return array(
@@ -325,19 +327,21 @@ function mge_api_get_projects( WP_REST_Request $request ) {
     foreach ( $query->posts as $post ) {
         $fields = get_fields( $post->ID );
 
-        // Process gallery
+        // Process gallery (5 individual image slots — gallery_1..gallery_5)
         $gallery = array();
-        if ( ! empty( $fields['project_gallery'] ) && is_array( $fields['project_gallery'] ) ) {
-            foreach ( $fields['project_gallery'] as $image ) {
-                $gallery[] = array(
-                    'id'        => $image['id'] ?? 0,
-                    'url'       => $image['url'] ?? '',
-                    'alt'       => $image['alt'] ?? '',
-                    'thumbnail' => $image['sizes']['thumbnail'] ?? '',
-                    'medium'    => $image['sizes']['medium'] ?? '',
-                    'large'     => $image['sizes']['large'] ?? '',
-                );
+        foreach ( array( 'gallery_1', 'gallery_2', 'gallery_3', 'gallery_4', 'gallery_5' ) as $slot ) {
+            $image = $fields[ $slot ] ?? null;
+            if ( ! $image || ! is_array( $image ) ) {
+                continue;
             }
+            $gallery[] = array(
+                'id'        => $image['id'] ?? 0,
+                'url'       => $image['url'] ?? '',
+                'alt'       => $image['alt'] ?? '',
+                'thumbnail' => $image['sizes']['thumbnail'] ?? '',
+                'medium'    => $image['sizes']['medium'] ?? '',
+                'large'     => $image['sizes']['large'] ?? '',
+            );
         }
 
         // Get categories
