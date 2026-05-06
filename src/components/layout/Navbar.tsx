@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight, Activity } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import { cn } from "@/utils/cn";
 
 const navLinks = [
@@ -38,15 +39,13 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group">
-                    <div className="bg-primary p-2 group-hover:bg-accent transition-colors duration-300">
-                        <Activity className="w-6 h-6 text-white" />
-                    </div>
+                    <Image src="/logo.png" alt="Multi Green Engineering Logo" width={50} height={50} />
                     <div className="flex flex-col">
-                        <span className={cn("text-xl font-bold font-heading leading-tight transition-colors duration-300", scrolled ? "text-primary" : "text-white")}>
-                            MULTI GREEN <span className="text-accent">ENGINEERING</span>
+                        <span className={cn("text-xl font-bold font-heading leading-tight transition-colors duration-300", scrolled ? "text-gray-800" : "text-white")}>
+                            MULTI GREEN <span className="text-primary-green">ENGINEERING</span>
                         </span>
-                        <span className={cn("text-[10px] tracking-[0.2em] uppercase font-semibold transition-colors duration-300", scrolled ? "text-neutral" : "text-white/60")}>
-                            Consulting & Civil Engineering
+                        <span className={cn("text-[10px] tracking-[0.2em] uppercase font-semibold transition-colors duration-300", scrolled ? "text-gray-600" : "text-white/60")}>
+                            Building Construction & Civil Works
                         </span>
                     </div>
                 </Link>
@@ -58,10 +57,10 @@ const Navbar = () => {
                             key={link.name}
                             href={link.href}
                             className={cn(
-                                "text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-accent",
+                                "text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-accent-yellow",
                                 scrolled
-                                    ? (pathname === link.href ? "text-accent" : "text-primary/70")
-                                    : (pathname === link.href ? "text-accent" : "text-white/80")
+                                    ? (pathname === link.href ? "text-primary-green" : "text-gray-800/70")
+                                    : (pathname === link.href ? "text-accent-yellow" : "text-white/80")
                             )}
                         >
                             {link.name}
@@ -72,7 +71,7 @@ const Navbar = () => {
                             href="https://app.mge-eng.com"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-accent text-white px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-accent-hover transition-all duration-300"
+                            className="bg-primary-green text-white px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-opacity-90 transition-all duration-300"
                         >
                             Staff Login
                         </a>
@@ -80,7 +79,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Toggle */}
-                <button className={cn("lg:hidden transition-colors duration-300", scrolled ? "text-primary" : "text-white")} onClick={() => setIsOpen(!isOpen)}>
+                <button className={cn("lg:hidden transition-colors duration-300", scrolled ? "text-gray-800" : "text-white")} onClick={() => setIsOpen(!isOpen)}>
                     {isOpen ? <X /> : <Menu />}
                 </button>
             </div>
@@ -93,7 +92,7 @@ const Navbar = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed inset-0 z-40 bg-primary lg:hidden pt-24 px-8"
+                        className="fixed inset-0 z-40 bg-primary-green lg:hidden pt-24 px-8"
                     >
                         <div className="flex flex-col gap-6">
                             {navLinks.map((link) => (
@@ -101,7 +100,7 @@ const Navbar = () => {
                                     key={link.name}
                                     href={link.href}
                                     onClick={() => setIsOpen(false)}
-                                    className="text-3xl font-bold text-white hover:text-accent transition-colors flex items-center justify-between group"
+                                    className="text-3xl font-bold text-white hover:text-accent-yellow transition-colors flex items-center justify-between group"
                                 >
                                     {link.name}
                                     <ChevronRight className="w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -112,7 +111,7 @@ const Navbar = () => {
                                     href="https://app.mge-eng.com"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-accent text-white py-4 text-center font-bold uppercase tracking-widest hover:bg-accent-hover"
+                                    className="bg-accent-yellow text-gray-800 py-4 text-center font-bold uppercase tracking-widest"
                                 >
                                     Staff Login
                                 </a>

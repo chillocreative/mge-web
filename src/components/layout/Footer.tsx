@@ -13,7 +13,7 @@ const Footer = () => {
                     {/* Company Info */}
                     <div className="space-y-6">
                         <Link href="/" className="flex items-center gap-3 group">
-                            <Image src="/logo.svg" alt="Multi Green Engineering Logo" width={50} height={50} className="bg-white rounded-full p-1" />
+                            <Image src="/logo.png" alt="Multi Green Engineering Logo" width={50} height={50} className="bg-white rounded-full p-1" />
                             <span className="text-xl font-bold font-heading tracking-tight leading-tight">
                                 MULTI GREEN <span className="text-accent-yellow">ENGINEERING</span>
                             </span>

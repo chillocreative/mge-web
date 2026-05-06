@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const letters = ["M", "G", "E"];
 
@@ -30,6 +31,21 @@ const Preloader = () => {
                     className="fixed inset-0 z-[9999] flex items-center justify-center bg-primary"
                 >
                     <div className="flex flex-col items-center">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="mb-6 bg-white rounded-full p-3 shadow-lg"
+                        >
+                            <Image
+                                src="/logo.png"
+                                alt="Multi Green Engineering Logo"
+                                width={96}
+                                height={96}
+                                priority
+                                className="w-24 h-24 object-contain"
+                            />
+                        </motion.div>
                         <div className="flex items-center mb-6">
                             {letters.map((letter, i) => (
                                 <motion.span
