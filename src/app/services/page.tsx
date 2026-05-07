@@ -73,7 +73,7 @@ const ServicesPage = async () => {
                 <div className="max-w-3xl mb-16 text-center mx-auto">
                     <Heading level={2} className="text-primary-green font-heading mb-4">Core Capabilities</Heading>
                     <p className="text-gray-600 leading-relaxed text-lg">
-                        As a CIDB G7 certified company, Multi Green Engineering is authorized to undertake engineering projects of unlimited value. Our multi-disciplinary approach ensures that we can handle all aspects of civil, mechanical, and electrical works under one roof.
+                        As a CIDB G7 certified company, Multi Green Engineering is authorized to undertake engineering projects of unlimited value. Our multi-disciplinary approach adapt with modern technology to ensure that we can handle all aspects of civil, mechanical, and electrical works under one roof.
                     </p>
                 </div>
 
