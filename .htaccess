@@ -1,11 +1,8 @@
 RewriteEngine On
 
-# Don't rewrite WordPress CMS paths
+# Don't touch WordPress CMS paths — let WP serve them from /cms
 RewriteRule ^cms(/|$) - [L]
 
-# Rewrite all other requests to out/ directory
-RewriteCond %{REQUEST_URI} !^/out/
-RewriteRule ^(.*)$ out/$1 [L]
-
-# Custom 404
-ErrorDocument 404 /out/404.html
+# Static frontend files live at the document root.
+DirectoryIndex index.html
+ErrorDocument 404 /404.html

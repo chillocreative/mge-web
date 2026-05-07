@@ -22,33 +22,27 @@ jobs:
         env:
           NEXT_PUBLIC_WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
 
-      - name: Stage root .htaccess for FTP
+      - name: Stage frontend bundle for FTP
         run: |
-          mkdir -p ./root-deploy
-          cp .htaccess ./root-deploy/.htaccess
+          # Drop the .htaccess into the same bundle that gets uploaded to
+          # public_html/, so a single FTP pass writes the rewrite rules
+          # alongside the static export.
+          cp .htaccess ./out/.htaccess
 
-      - name: Deploy root .htaccess to public_html
+      - name: Deploy frontend to public_html
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          local-dir: ./root-deploy/
-          state-name: .root-deploy-state.json
-
-      - name: Deploy frontend to public_html/out
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}out/
           local-dir: ./out/
-          state-name: .frontend-deploy-state-v4.json
+          state-name: .frontend-deploy-state-v5.json
           exclude: |
             **/.git*
             **/.git*/**
+            cms/**
+            **/cms/**
 
       - name: Deploy WordPress CMS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
