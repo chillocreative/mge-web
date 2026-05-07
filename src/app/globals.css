@@ -1,13 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0a192f;
-  --color-primary-light: #112240;
-  --color-accent: #f97316;
-  --color-accent-hover: #ea580c;
+  /* MGE Primary — Deep Forest Green (matches MGE-PMS primary-900/800/700) */
+  --color-primary: #14532d;
+  --color-primary-light: #166534;
+
+  /* MGE Brand Green — used for footer, page headers, navbar, CTAs */
+  --color-primary-green: #15803d;
+
+  /* MGE Accent — Bright Yellow (high contrast against deep greens) */
+  --color-accent: #d4e42d;
+  --color-accent-hover: #c5d41f;
+  --color-accent-yellow: #d4e42d;
+
   --color-neutral: #64748b;
-  --color-industrial: #f1f5f9;
-  
+  /* Industrial BG — Warm light with slight yellow tint for contrast */
+  --color-industrial: #f5fce8;
+
   --font-sans: var(--font-inter), ui-sans-serif, system-ui;
   --font-heading: var(--font-outfit), var(--font-inter);
 
@@ -17,7 +26,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #0a192f;
+  --foreground: #14532d;
 }
 
 @media (prefers-color-scheme: dark) {

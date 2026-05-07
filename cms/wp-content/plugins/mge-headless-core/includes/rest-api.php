@@ -239,6 +239,32 @@ add_action( 'rest_api_init', function () {
 });
 
 /**
+ * Resolve a project's cover image URL.
+ *
+ * Prefer the WordPress native "Featured Image" (post thumbnail) if set;
+ * otherwise fall back to gallery_1 (the ACF "Photo 1 (Cover)" slot) so
+ * editors who only use the gallery still get a cover image on the
+ * frontend cards and detail page.
+ *
+ * @param int   $post_id
+ * @param array $fields  ACF fields already fetched via get_fields().
+ * @return string|null
+ */
+function mge_resolve_project_cover( int $post_id, array $fields ): ?string {
+    $url = get_the_post_thumbnail_url( $post_id, 'large' );
+    if ( $url ) {
+        return $url;
+    }
+
+    $cover = $fields['gallery_1'] ?? null;
+    if ( $cover && is_array( $cover ) ) {
+        return $cover['sizes']['large'] ?? $cover['url'] ?? null;
+    }
+
+    return null;
+}
+
+/**
  * Services endpoint callback.
  */
 function mge_api_get_services( WP_REST_Request $request ) {
@@ -365,7 +391,7 @@ function mge_api_get_projects( WP_REST_Request $request ) {
             'status'         => $fields['project_status'] ?? 'completed',
             'featured'       => (bool) ( $fields['project_featured'] ?? false ),
             'gallery'        => $gallery,
-            'featured_image' => get_the_post_thumbnail_url( $post->ID, 'large' ) ?: null,
+            'featured_image' => mge_resolve_project_cover( $post->ID, $fields ),
             'date'           => $post->post_date,
         );
     }
