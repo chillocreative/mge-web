@@ -30,7 +30,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}out/
           local-dir: ./out/
-          dangerous-clean-slate: true
+          state-name: .frontend-deploy-state-v3.json
           exclude: |
             **/.git*
             **/.git*/**
