@@ -19,7 +19,7 @@ const Footer = () => {
                             </span>
                         </Link>
                         <p className="text-white/70 text-sm leading-relaxed">
-                            A professional workforce dedicated to providing services in the Civil Engineering field, specifically in Building Construction and Civil Works.
+                            A professional workforce dedicated to providing services with modern technology in the Construction Engineering field, specifically in Infra and Civil Works.
                         </p>
                     </div>
 

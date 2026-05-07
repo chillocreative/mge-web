@@ -46,8 +46,8 @@ const AboutPage = () => {
                     MULTI GREEN <span className="text-primary-green italic">ENGINEERING</span>
                 </Heading>
                 <div className="space-y-4 text-gray-600 leading-relaxed">
-                    <p>Multi Green Engineering Sdn. Bhd. was incorporated under the Companies Act 1965 on 18 March 2014, founded and led by a 100% Bumiputera team of highly skilled professionals across specialised engineering disciplines.</p>
-                    <p>The company delivers civil engineering services with a focus on Building Construction and Civil Works, backed by strong financials with RM15 million paid-up capital. We hold a Grade G7 licence from the Construction Industry Development Board (CIDB) and are accredited to ISO 9001:2015, awarded on 5 July 2018.</p>
+                    <p>MULTI GREEN ENGINEERING SDN. BHD. was incorporated under the Company Act 1965 on March 18, 2014. This company is established and run by a group of professional workforces which comprises of 100% Bumiputera high-skilled in specific areas.</p>
+                    <p>This company provides services in the Construction Engineering field specifically in Infra and Civil Works with strong financial Capital Paid up RM15,000,000.00. It started its construction activity with Grade G7 licenses from the Construction Industry Development Board (&quot;CIDB&quot;) and has been accredited and awarded ISO 9001: 2015 on July 5, 2018.</p>
                 </div>
             </div>
             <div className="p-8 bg-white shadow-lg border-l-4 border-primary-green">

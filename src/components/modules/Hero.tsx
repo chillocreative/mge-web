@@ -50,7 +50,7 @@ const Hero = ({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                        <h1 className="text-4xl md:text-6xl lg:text-8xl font-heading font-black text-white leading-[1.1] mb-8 uppercase tracking-tighter">
+                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-[1.1] mb-8 uppercase tracking-tighter">
                             {title}
                         </h1>
                     </motion.div>
