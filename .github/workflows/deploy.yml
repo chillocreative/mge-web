@@ -22,21 +22,6 @@ jobs:
         env:
           NEXT_PUBLIC_WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
 
-      - name: Stage root .htaccess for FTP
-        run: |
-          mkdir -p ./root-deploy
-          cp .htaccess ./root-deploy/.htaccess
-
-      - name: Deploy root .htaccess to public_html
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          local-dir: ./root-deploy/
-          state-name: .root-deploy-state.json
-
       - name: Deploy frontend to public_html/out
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -45,7 +30,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}out/
           local-dir: ./out/
-          state-name: .frontend-deploy-state-v4.json
+          state-name: .frontend-deploy-state-v3.json
           exclude: |
             **/.git*
             **/.git*/**
