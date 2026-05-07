@@ -40,7 +40,7 @@ function mge_register_cpt_services() {
         'rest_base'           => 'services',
         'menu_position'       => 5,
         'menu_icon'           => 'dashicons-hammer',
-        'supports'            => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields' ),
+        'supports'            => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'has_archive'         => false,
         'rewrite'             => array( 'slug' => 'services' ),
         'capability_type'     => 'post',

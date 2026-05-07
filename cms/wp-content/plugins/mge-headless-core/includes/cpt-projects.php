@@ -40,7 +40,7 @@ function mge_register_cpt_projects() {
         'rest_base'           => 'projects',
         'menu_position'       => 6,
         'menu_icon'           => 'dashicons-building',
-        'supports'            => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields' ),
+        'supports'            => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'has_archive'         => false,
         'rewrite'             => array( 'slug' => 'projects' ),
         'capability_type'     => 'post',

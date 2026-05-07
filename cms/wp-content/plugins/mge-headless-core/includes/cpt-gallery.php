@@ -40,7 +40,7 @@ function mge_register_cpt_gallery() {
         'rest_base'           => 'gallery',
         'menu_position'       => 7,
         'menu_icon'           => 'dashicons-format-gallery',
-        'supports'            => array( 'title', 'thumbnail', 'custom-fields' ),
+        'supports'            => array( 'title', 'thumbnail' ),
         'has_archive'         => false,
         'rewrite'             => array( 'slug' => 'gallery' ),
         'capability_type'     => 'post',

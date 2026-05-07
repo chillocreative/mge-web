@@ -94,9 +94,11 @@ function mge_register_acf_fields() {
                 ),
             ),
         ),
-        'menu_order' => 0,
-        'style'      => 'default',
-        'position'   => 'normal',
+        'menu_order'    => 0,
+        'style'         => 'default',
+        'position'      => 'normal',
+        'active'        => true,
+        'show_in_rest'  => true,
     ));
 
     // ============================================================
@@ -229,9 +231,11 @@ function mge_register_acf_fields() {
                 ),
             ),
         ),
-        'menu_order' => 0,
-        'style'      => 'default',
-        'position'   => 'normal',
+        'menu_order'    => 0,
+        'style'         => 'default',
+        'position'      => 'normal',
+        'active'        => true,
+        'show_in_rest'  => true,
     ));
 
     // ============================================================
@@ -285,8 +289,26 @@ function mge_register_acf_fields() {
                 ),
             ),
         ),
-        'menu_order' => 0,
-        'style'      => 'default',
-        'position'   => 'normal',
+        'menu_order'    => 0,
+        'style'         => 'default',
+        'position'      => 'normal',
+        'active'        => true,
+        'show_in_rest'  => true,
     ));
 }
+
+/**
+ * Remove the legacy WordPress "Custom Fields" meta box on MGE CPTs.
+ *
+ * Why: with `'custom-fields'` removed from `supports`, the postcustom
+ * meta box should not register, but some installs (and add-on plugins)
+ * still register it, leaving an empty "Meta Boxes" panel under the
+ * Gutenberg editor when adding a new Service / Project / Gallery item.
+ * This belt-and-braces cleanup keeps the Add New screen tidy.
+ */
+add_action( 'admin_menu', function () {
+    foreach ( array( 'mge_service', 'mge_project', 'mge_gallery' ) as $cpt ) {
+        remove_meta_box( 'postcustom', $cpt, 'normal' );
+        remove_meta_box( 'slugdiv',    $cpt, 'normal' );
+    }
+}, 100 );
