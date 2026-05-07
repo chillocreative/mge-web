@@ -94,11 +94,10 @@ function mge_register_acf_fields() {
                 ),
             ),
         ),
-        'menu_order'    => 0,
-        'style'         => 'default',
-        'position'      => 'normal',
-        'active'        => true,
-        'show_in_rest'  => true,
+        'menu_order' => 0,
+        'style'      => 'default',
+        'position'   => 'normal',
+        'active'     => true,
     ));
 
     // ============================================================
@@ -231,11 +230,10 @@ function mge_register_acf_fields() {
                 ),
             ),
         ),
-        'menu_order'    => 0,
-        'style'         => 'default',
-        'position'      => 'normal',
-        'active'        => true,
-        'show_in_rest'  => true,
+        'menu_order' => 0,
+        'style'      => 'default',
+        'position'   => 'normal',
+        'active'     => true,
     ));
 
     // ============================================================
@@ -289,11 +287,10 @@ function mge_register_acf_fields() {
                 ),
             ),
         ),
-        'menu_order'    => 0,
-        'style'         => 'default',
-        'position'      => 'normal',
-        'active'        => true,
-        'show_in_rest'  => true,
+        'menu_order' => 0,
+        'style'      => 'default',
+        'position'   => 'normal',
+        'active'     => true,
     ));
 }
 
@@ -321,69 +318,14 @@ add_action( 'admin_menu', function () {
 }, 100 );
 
 /**
- * Aggressively scrub `normal` / `advanced` context meta boxes for MGE CPTs
- * before Gutenberg decides whether to render the bottom "Meta Boxes" panel.
- *
- * Why: Gutenberg shows the empty bottom container whenever any meta box is
- * registered at `normal` or `advanced` context, even if every meta box is
- * hidden. ACF renders its field groups in the document sidebar (`side`
- * context after user-pref drag, or via REST integration), so the bottom
- * container is always empty for these CPTs.
- *
- * We only touch `normal` / `advanced` contexts — `side` is untouched so
- * the ACF "Service Details" panel keeps rendering in the sidebar.
- */
-add_filter( 'filter_block_editor_meta_boxes', function ( $wp_meta_boxes ) {
-    global $current_screen;
-    if ( ! $current_screen || ! in_array( $current_screen->post_type, mge_managed_cpts(), true ) ) {
-        return $wp_meta_boxes;
-    }
-
-    $screen_id = $current_screen->id;
-    if ( ! isset( $wp_meta_boxes[ $screen_id ] ) ) {
-        return $wp_meta_boxes;
-    }
-
-    foreach ( array( 'normal', 'advanced' ) as $context ) {
-        if ( isset( $wp_meta_boxes[ $screen_id ][ $context ] ) ) {
-            $wp_meta_boxes[ $screen_id ][ $context ] = array();
-        }
-    }
-
-    return $wp_meta_boxes;
-}, 999 );
-
-/**
  * Reset any saved per-user `meta-box-order_<cpt>` preference that may have
- * been created by an earlier drag-and-drop, so ACF's field group always
- * lands in its registered position instead of being stranded somewhere
- * the user previously moved it.
+ * been created by an earlier drag-and-drop. Without this, the ACF field
+ * group can get stranded in the sidebar (or hidden) because WordPress
+ * remembers where the user previously moved it. Returning false here makes
+ * WordPress fall back to each meta box's registered position (`normal`
+ * for our ACF groups), so the Service Details panel always renders below
+ * the editor where users expect it.
  */
 add_filter( 'get_user_option_meta-box-order_mge_service', '__return_false' );
 add_filter( 'get_user_option_meta-box-order_mge_project', '__return_false' );
 add_filter( 'get_user_option_meta-box-order_mge_gallery', '__return_false' );
-
-/**
- * Failsafe inline CSS — hides the empty Meta Boxes container under the
- * Gutenberg editor on MGE CPT screens, in case anything still slips past
- * the meta-box filter above (e.g. a newly added third-party plugin
- * registering a meta box for these CPTs).
- */
-add_action( 'admin_head', function () {
-    $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-    if ( ! $screen || ! in_array( $screen->post_type, mge_managed_cpts(), true ) ) {
-        return;
-    }
-    ?>
-    <style id="mge-hide-empty-metaboxes">
-        /* Hide empty Meta Boxes panel under the Gutenberg editor */
-        .edit-post-meta-boxes-main,
-        .edit-post-layout__metaboxes,
-        .editor-meta-boxes-main,
-        .edit-post-meta-boxes-area--empty,
-        .editor-meta-boxes-area--empty {
-            display: none !important;
-        }
-    </style>
-    <?php
-} );
