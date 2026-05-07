@@ -19,6 +19,12 @@
 # production
 /build
 
+# Next.js static export — rebuilt by CI on every push, no need to track
+/out/
+
+# Local plugin upload zips
+mge-headless-core-*.zip
+
 # misc
 .DS_Store
 *.pem
@@ -45,6 +51,7 @@ next-env.d.ts
 /cms/wp-content/uploads/
 /cms/wp-content/upgrade/
 /cms/wp-content/cache/
+/cms/wp-content/debug.log
 
 # Windows artifacts
 nul
