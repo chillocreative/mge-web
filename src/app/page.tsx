@@ -36,23 +36,6 @@ const fallbackServices = [
   },
 ];
 
-const fallbackProjects = [
-  {
-    id: 1,
-    slug: "",
-    category: "Flood Mitigation",
-    title: "Projek Pembangunan Lembangan Sungai Bersepadu Sungai Golok",
-    featured_image: null,
-  },
-  {
-    id: 2,
-    slug: "",
-    category: "Road Works",
-    title: "Projek Menaiktaraf Jalan Muar – Tangkak – Segamat, Johor",
-    featured_image: null,
-  },
-];
-
 export default async function Home() {
   const [servicesRes, projectsRes] = await Promise.all([
     apiService.getServices({ per_page: 3 }),
@@ -60,7 +43,7 @@ export default async function Home() {
   ]);
 
   const services = servicesRes?.data?.length ? servicesRes.data : fallbackServices;
-  const projects = projectsRes?.data?.length ? projectsRes.data : fallbackProjects;
+  const projects = projectsRes?.data ?? [];
 
   return (
     <main className="min-h-screen">
@@ -146,7 +129,7 @@ export default async function Home() {
       <Section>
         <div className="text-center mb-16">
           <span className="text-accent-yellow font-bold uppercase tracking-[0.3em] text-xs">Our Portfolio</span>
-          <Heading level={2} className="mt-4 uppercase">Featured <span className="text-primary-green italic">Projects</span></Heading>
+          <Heading level={2} className="mt-4 uppercase">Our <span className="text-primary-green italic">Projects</span></Heading>
         </div>
 
         {projects.length > 0 && (
