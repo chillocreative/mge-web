@@ -266,6 +266,14 @@ function mge_resolve_project_cover( int $post_id, array $fields ): ?string {
 
 /**
  * Services endpoint callback.
+ *
+ * Note: we intentionally do NOT use `'meta_key' => 'service_order'` +
+ * `'orderby' => 'meta_value_num'` here. That combination causes WP_Query
+ * to inner-join on the meta key, which silently excludes any service
+ * post that doesn't have a `service_order` meta value set — newly
+ * created services typically don't, since the field is in an ACF group
+ * the editor may leave at default. We fetch every published service and
+ * sort in PHP, treating missing/empty `service_order` as 0.
  */
 function mge_api_get_services( WP_REST_Request $request ) {
     $per_page = $request->get_param( 'per_page' );
@@ -276,13 +284,22 @@ function mge_api_get_services( WP_REST_Request $request ) {
         'posts_per_page' => $per_page,
         'paged'          => $page,
         'post_status'    => 'publish',
-        'meta_key'       => 'service_order',
-        'orderby'        => 'meta_value_num',
+        'orderby'        => 'date',
         'order'          => 'ASC',
     ));
 
+    $posts = $query->posts;
+    usort( $posts, function ( $a, $b ) {
+        $a_order = (int) get_post_meta( $a->ID, 'service_order', true );
+        $b_order = (int) get_post_meta( $b->ID, 'service_order', true );
+        if ( $a_order === $b_order ) {
+            return strtotime( $a->post_date ) <=> strtotime( $b->post_date );
+        }
+        return $a_order <=> $b_order;
+    });
+
     $services = array();
-    foreach ( $query->posts as $post ) {
+    foreach ( $posts as $post ) {
         $fields = get_fields( $post->ID );
         $services[] = array(
             'id'                => $post->ID,
@@ -413,13 +430,15 @@ function mge_api_get_gallery( WP_REST_Request $request ) {
     $category   = $request->get_param( 'category' );
     $project_id = $request->get_param( 'project_id' );
 
+    // Same caveat as services: don't gate the query on `gallery_order`
+    // meta key existing, or new gallery items without that ACF field
+    // populated will be silently dropped. Fetch all and sort in PHP.
     $args = array(
         'post_type'      => 'mge_gallery',
         'posts_per_page' => $per_page,
         'paged'          => $page,
         'post_status'    => 'publish',
-        'meta_key'       => 'gallery_order',
-        'orderby'        => 'meta_value_num',
+        'orderby'        => 'date',
         'order'          => 'ASC',
     );
 
@@ -445,8 +464,18 @@ function mge_api_get_gallery( WP_REST_Request $request ) {
 
     $query = new WP_Query( $args );
 
+    $posts = $query->posts;
+    usort( $posts, function ( $a, $b ) {
+        $a_order = (int) get_post_meta( $a->ID, 'gallery_order', true );
+        $b_order = (int) get_post_meta( $b->ID, 'gallery_order', true );
+        if ( $a_order === $b_order ) {
+            return strtotime( $a->post_date ) <=> strtotime( $b->post_date );
+        }
+        return $a_order <=> $b_order;
+    });
+
     $gallery_items = array();
-    foreach ( $query->posts as $post ) {
+    foreach ( $posts as $post ) {
         $fields = get_fields( $post->ID );
         $image  = $fields['gallery_image'] ?? null;
 

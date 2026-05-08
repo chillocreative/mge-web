@@ -3,7 +3,7 @@
  * Plugin Name: MGE Headless Core
  * Plugin URI: https://mge-engineering.com
  * Description: Core plugin for MGE Engineering headless CMS. Registers Custom Post Types, ACF fields, REST API endpoints, and CORS configuration.
- * Version: 1.4.3
+ * Version: 1.4.4
  * Author: MGE Engineering Sdn Bhd
  * Requires at least: 6.0
  * Requires PHP: 8.0
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'MGE_HEADLESS_VERSION', '1.4.3' );
+define( 'MGE_HEADLESS_VERSION', '1.4.4' );
 define( 'MGE_HEADLESS_PATH', plugin_dir_path( __FILE__ ) );
 
 // Load modules
