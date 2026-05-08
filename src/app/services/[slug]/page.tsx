@@ -6,20 +6,31 @@ import Section from "@/components/layout/Section";
 import Heading from "@/components/ui/Heading";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle } from "lucide-react";
-import { apiService, Service } from "@/services/api";
+import { apiService, Service, withApiRetry } from "@/services/api";
 
 // Only render paths from generateStaticParams; skip route entirely if API is unreachable
 export const dynamicParams = false;
 
+// Module-level cache so generateStaticParams, generateMetadata, and the
+// page render share a single retried API call per build worker instead
+// of hammering the API once per slug × 3 functions.
+let _services: Service[] | null = null;
+async function loadServices(): Promise<Service[]> {
+  if (_services) return _services;
+  const response = await withApiRetry(() => apiService.getServices({ per_page: 100 }));
+  _services = response?.data ?? [];
+  return _services;
+}
+
 export async function generateStaticParams() {
-  const response = await apiService.getServices({ per_page: 100 }).catch(() => null);
-  return (response?.data ?? []).map((service) => ({ slug: service.slug }));
+  const services = await loadServices();
+  return services.map((service) => ({ slug: service.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const response = await apiService.getServices({ per_page: 100 }).catch(() => null);
-  const service = response?.data?.find((s: Service) => s.slug === slug);
+  const services = await loadServices();
+  const service = services.find((s: Service) => s.slug === slug);
   if (!service) return { title: "Service Not Found | Multi Green Engineering" };
   return {
     title: `${service.title} | Multi Green Engineering`,
@@ -29,8 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const response = await apiService.getServices({ per_page: 100 }).catch(() => null);
-  const services = response?.data ?? [];
+  const services = await loadServices();
   const service = services.find((s) => s.slug === slug);
   if (!service) notFound();
   const otherServices = services.filter((s) => s.id !== service.id);

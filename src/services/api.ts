@@ -159,6 +159,38 @@ function decodeFields<T>(item: T, fields: (keyof T)[]): T {
 }
 
 // ============================================================
+// RETRY HELPER
+// ============================================================
+
+/**
+ * Retry an API call up to N times with linear backoff.
+ *
+ * Why: at build time the GitHub Actions runner is occasionally
+ * rate-limited or briefly blocked by the WordPress host's protection
+ * (Imunify Security on cPanel). A single transient block fails the
+ * entire static export build even though the API is healthy seconds
+ * later. Retrying gives the build a chance to recover.
+ *
+ * The wrapped function should already swallow errors and return null
+ * on failure (apiService.getX methods do this) — withApiRetry just
+ * keeps trying until a non-null result comes back or attempts run out.
+ */
+export async function withApiRetry<T>(
+    fn: () => Promise<T | null>,
+    attempts = 5,
+    baseDelayMs = 2000,
+): Promise<T | null> {
+    for (let i = 0; i < attempts; i++) {
+        const result = await fn();
+        if (result) return result;
+        if (i < attempts - 1) {
+            await new Promise((resolve) => setTimeout(resolve, baseDelayMs * (i + 1)));
+        }
+    }
+    return null;
+}
+
+// ============================================================
 // API SERVICE
 // ============================================================
 

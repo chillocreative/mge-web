@@ -6,21 +6,32 @@ import Section from "@/components/layout/Section";
 import Heading from "@/components/ui/Heading";
 import Link from "next/link";
 import { ArrowLeft, MapPin, Calendar, Briefcase, DollarSign, FileText, Tag } from "lucide-react";
-import { apiService, Project } from "@/services/api";
+import { apiService, Project, withApiRetry } from "@/services/api";
 import GalleryLightbox from "@/components/modules/GalleryLightbox";
 
 // Only render paths from generateStaticParams; skip route entirely if API is unreachable
 export const dynamicParams = false;
 
+// Module-level cache so generateStaticParams, generateMetadata, and the
+// page render share a single retried API call per build worker instead
+// of hammering the API once per slug × 3 functions.
+let _projects: Project[] | null = null;
+async function loadProjects(): Promise<Project[]> {
+  if (_projects) return _projects;
+  const response = await withApiRetry(() => apiService.getProjects({ per_page: 100 }));
+  _projects = response?.data ?? [];
+  return _projects;
+}
+
 export async function generateStaticParams() {
-  const response = await apiService.getProjects({ per_page: 100 }).catch(() => null);
-  return (response?.data ?? []).map((project) => ({ slug: project.slug }));
+  const projects = await loadProjects();
+  return projects.map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const response = await apiService.getProjects({ per_page: 100 }).catch(() => null);
-  const project = response?.data?.find((p: Project) => p.slug === slug);
+  const projects = await loadProjects();
+  const project = projects.find((p: Project) => p.slug === slug);
 
   if (!project) {
     return { title: "Project Not Found | Multi Green Engineering" };
@@ -34,8 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const response = await apiService.getProjects({ per_page: 100 }).catch(() => null);
-  const projects = response?.data ?? [];
+  const projects = await loadProjects();
   const project = projects.find((p) => p.slug === slug);
 
   if (!project) {
