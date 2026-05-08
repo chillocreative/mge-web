@@ -22,15 +22,24 @@ jobs:
         env:
           NEXT_PUBLIC_WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
 
+      # FTP user is rooted at /home/mgeengco/, so this hardcoded path
+      # resolves to /home/mgeengco/public_html/out/ — the directory that
+      # mge-eng.com actually serves from (the .htaccess at the doc root
+      # rewrites every non-/cms request to /out/).
+      #
+      # Previously this used ${{ secrets.FTP_SERVER_DIR }}, which pointed
+      # to /mge-eng.com/web/public_html/ — a sibling folder mge-eng.com
+      # does NOT serve from — so all earlier CI deploys silently landed
+      # in dead space and never updated the live site.
       - name: Deploy frontend to public_html/out
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}out/
+          server-dir: public_html/out/
           local-dir: ./out/
-          state-name: .frontend-deploy-state-v3.json
+          state-name: .frontend-deploy-state-v6.json
           exclude: |
             **/.git*
             **/.git*/**
