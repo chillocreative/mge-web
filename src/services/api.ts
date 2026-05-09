@@ -41,6 +41,28 @@ const wpClient: AxiosInstance = axios.create({
 });
 
 /**
+ * Cache-bust every WP API request with a unique timestamp param.
+ *
+ * Why: the headless plugin sets `Cache-Control: public, s-maxage=600`
+ * on /wp-json/mge/v1/* responses, and LiteSpeed (in front of WordPress)
+ * happily caches them at the edge. When CI builds the static export it
+ * fetches against that LiteSpeed cache and can get a 10-minute-stale
+ * response — e.g. a freshly-published service is missing, so the build
+ * silently generates a site without it. Adding `_t=Date.now()` to the
+ * query string forces a unique URL on every request, which the cache
+ * cannot match, guaranteeing a fresh response.
+ *
+ * No-op for the runtime (this is a static export, the only consumers
+ * are the build process and any in-browser admin tools).
+ */
+const attachCacheBust = (config: import("axios").InternalAxiosRequestConfig) => {
+    config.params = { ...(config.params ?? {}), _t: Date.now() };
+    return config;
+};
+mgeClient.interceptors.request.use(attachCacheBust);
+wpClient.interceptors.request.use(attachCacheBust);
+
+/**
  * Unified error handler.
  */
 const handleApiError = (error: AxiosError) => {
