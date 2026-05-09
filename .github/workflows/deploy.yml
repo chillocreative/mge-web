@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: public_html/out/
           local-dir: ./out/
-          state-name: .frontend-deploy-state-v6.json
+          state-name: .frontend-deploy-state-v7.json
           exclude: |
             **/.git*
             **/.git*/**
