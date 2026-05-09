@@ -50,7 +50,7 @@ const Footer = () => {
                         <ul className="space-y-4 text-white/70 text-sm">
                             <li className="flex gap-3">
                                 <MapPin className="w-5 h-5 text-accent-yellow shrink-0 mt-1" />
-                                <span>NO 149, JALAN DATO' SIA HER YAM, 85000 SEGAMAT, JOHOR</span>
+                                <span>NO. 20 & 22, TINGKAT 4, JALAN KEKWA, 85000 SEGAMAT, JOHOR</span>
                             </li>
                             <li className="flex gap-3">
                                 <Phone className="w-5 h-5 text-accent-yellow shrink-0" />

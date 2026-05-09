@@ -71,9 +71,10 @@ const PrivacyPolicyPage = () => {
                     </p>
                     <div className="bg-neutral-100 p-8 border-l-4 border-accent">
                         <p className="font-bold text-primary mb-2">Multi Green Engineering Sdn Bhd</p>
-                        <p className="text-neutral-600">No. 4(4-1) Jln Jaya, Pusat Perniagaan Parit Jarum</p>
-                        <p className="text-neutral-600">Bukit Gambir 84800 Tangkak, Johor</p>
-                        <p className="text-neutral-600 mt-4">Email: info@mge-eng.com</p>
+                        <p className="text-neutral-600">NO. 20 & 22, TINGKAT 4, JALAN KEKWA</p>
+                        <p className="text-neutral-600">85000 SEGAMAT, JOHOR</p>
+                        <p className="text-neutral-600 mt-2">Tel: 07-931 2689</p>
+                        <p className="text-neutral-600">Email: info@mge-eng.com</p>
                     </div>
                 </div>
             </Section>

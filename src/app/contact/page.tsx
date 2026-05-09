@@ -13,8 +13,8 @@ export const metadata = constructMetadata({
 });
 
 const ContactPage = () => {
-    const address = "NO 149, JALAN DATO' SIA HER YAM, 85000 SEGAMAT, JOHOR";
-    const mapSrc = "https://maps.google.com/maps?q=2.5040,102.8227&hl=en&z=17&output=embed";
+    const address = "NO. 20 & 22, TINGKAT 4, JALAN KEKWA, 85000 SEGAMAT, JOHOR";
+    const mapSrc = "https://maps.google.com/maps?q=Jalan+Kekwa,+85000+Segamat,+Johor&hl=en&z=17&output=embed";
 
     return (
         <main className="min-h-screen bg-gray-50">

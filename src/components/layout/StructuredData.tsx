@@ -34,7 +34,7 @@ export const OrganizationSchema = () => (
             logo: "https://mge-engineering.com.my/logo.png",
             contactPoint: {
                 "@type": "ContactPoint",
-                telephone: "+60-3-1234-5678",
+                telephone: "+60-7-931-2689",
                 contactType: "customer service",
                 areaServed: "MY",
                 availableLanguage: ["English", "Malay"],
