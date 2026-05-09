@@ -9,3 +9,23 @@ RewriteRule ^(.*)$ out/$1 [L]
 
 # Custom 404
 ErrorDocument 404 /out/404.html
+
+# Cache control — Next.js static export deploys must show immediately,
+# so HTML pages bypass the LiteSpeed/browser cache while hashed static
+# assets (the *.js/*.css/images Next.js emits under _next/static/...
+# include a content hash in the filename) stay long-cached.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+    </FilesMatch>
+    <FilesMatch "\.(js|css|png|jpg|jpeg|gif|svg|webp|avif|woff2?|ttf|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# Note: the cPanel "BEGIN cPanel-generated handler" block (PHP handler
+# AddHandler directive) lives in the live server's .htaccess at
+# /home/mgeengco/public_html/.htaccess. We don't track it in repo
+# because cPanel manages it, but if/when this .htaccess gets deployed
+# via CI the live block must be preserved separately.
