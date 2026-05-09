@@ -22,23 +22,23 @@ jobs:
         env:
           NEXT_PUBLIC_WORDPRESS_URL: ${{ secrets.WORDPRESS_URL }}
 
-      # The configured FTP user is rooted at /home/mgeengco/mge-eng.com/web/
-      # (an addon-domain-scoped account), so a plain `public_html/out/`
-      # resolves to /home/mgeengco/mge-eng.com/web/public_html/out/ — a
-      # sibling folder that mge-eng.com does NOT serve from. The site's
-      # actual document root is /home/mgeengco/public_html/out/, so we
-      # have to traverse up two levels to reach it.
+      # FTP_USERNAME/FTP_PASSWORD are now the cPanel main-account
+      # special FTP user (`mgeengco`), which is rooted at
+      # /home/mgeengco/ (no chroot). So `public_html/out/` resolves
+      # cleanly to /home/mgeengco/public_html/out/ — the directory
+      # mge-eng.com actually serves from.
       #
-      # If the FTP server enforces a strict chroot this `..` traversal
-      # will fail and we'll need different FTP credentials (a main-account
-      # user rooted at /home/mgeengco/) instead.
+      # Earlier the secrets pointed at `web@mge-eng.com`, which was
+      # chrooted under /home/mgeengco/mge-eng.com/web/, so every
+      # CI deploy silently landed in a sibling folder mge-eng.com
+      # never read from.
       - name: Deploy frontend to public_html/out
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ../../public_html/out/
+          server-dir: public_html/out/
           local-dir: ./out/
           state-name: .frontend-deploy-state-v8.json
           exclude: |
