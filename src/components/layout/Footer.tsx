@@ -66,7 +66,15 @@ const Footer = () => {
 
                 <div className="pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-white/50 text-xs uppercase tracking-widest">
-                        © {currentYear} Multi Green Engineering Sdn Bhd. All Rights Reserved.
+                        © {currentYear} Multi Green Engineering Sdn Bhd. All Rights Reserved. | Made by:{" "}
+                        <a
+                            href="https://chillocreative.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-accent-yellow transition-colors"
+                        >
+                            Chillo Creative
+                        </a>
                     </p>
                     <div className="flex gap-6 text-white/50 text-xs uppercase tracking-widest">
                         <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
