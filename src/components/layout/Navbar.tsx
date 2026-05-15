@@ -5,12 +5,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 import { cn } from "@/utils/cn";
 
-const navLinks = [
+type NavLink = {
+    name: string;
+    href: string;
+    children?: { name: string; href: string }[];
+};
+
+const navLinks: NavLink[] = [
     { name: "Home", href: "/" },
-    { name: "About Us", href: "/about-us" },
+    {
+        name: "About Us",
+        href: "/about-us",
+        children: [{ name: "Certificates", href: "/about-us/certificates" }],
+    },
     { name: "Services", href: "/services" },
     { name: "Projects", href: "/projects" },
     { name: "Contact", href: "/contact" },
@@ -20,6 +30,9 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const pathname = usePathname();
+
+    const isActive = (href: string) =>
+        href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -52,18 +65,49 @@ const Navbar = () => {
 
                 {/* Desktop Links */}
                 <div className="hidden lg:flex items-center gap-8">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className={cn(
-                                "text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-primary-green",
-                                pathname === link.href ? "text-primary-green" : "text-gray-800/70"
-                            )}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
+                    {navLinks.map((link) =>
+                        link.children ? (
+                            <div key={link.name} className="relative group">
+                                <Link
+                                    href={link.href}
+                                    className={cn(
+                                        "flex items-center gap-1 text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-primary-green",
+                                        isActive(link.href) ? "text-primary-green" : "text-gray-800/70"
+                                    )}
+                                >
+                                    {link.name}
+                                    <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
+                                </Link>
+                                <div className="absolute left-0 top-full pt-4 opacity-0 invisible translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+                                    <div className="min-w-[220px] bg-industrial shadow-xl border-t-2 border-primary-green py-2">
+                                        {link.children.map((child) => (
+                                            <Link
+                                                key={child.name}
+                                                href={child.href}
+                                                className={cn(
+                                                    "block px-5 py-3 text-xs font-bold uppercase tracking-widest transition-colors hover:bg-primary-green hover:text-white",
+                                                    isActive(child.href) ? "text-primary-green" : "text-gray-800/70"
+                                                )}
+                                            >
+                                                {child.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className={cn(
+                                    "text-sm font-bold uppercase tracking-widest transition-colors duration-300 hover:text-primary-green",
+                                    isActive(link.href) ? "text-primary-green" : "text-gray-800/70"
+                                )}
+                            >
+                                {link.name}
+                            </Link>
+                        )
+                    )}
                     <div className="flex items-center gap-4">
                         <a
                             href="https://app.mge-eng.com"
@@ -94,15 +138,31 @@ const Navbar = () => {
                     >
                         <div className="flex flex-col gap-6">
                             {navLinks.map((link) => (
-                                <Link
-                                    key={link.name}
-                                    href={link.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className="text-3xl font-bold text-white hover:text-accent-yellow transition-colors flex items-center justify-between group"
-                                >
-                                    {link.name}
-                                    <ChevronRight className="w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </Link>
+                                <div key={link.name}>
+                                    <Link
+                                        href={link.href}
+                                        onClick={() => setIsOpen(false)}
+                                        className="text-3xl font-bold text-white hover:text-accent-yellow transition-colors flex items-center justify-between group"
+                                    >
+                                        {link.name}
+                                        <ChevronRight className="w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </Link>
+                                    {link.children && (
+                                        <div className="mt-4 ml-4 flex flex-col gap-3 border-l-2 border-white/20 pl-4">
+                                            {link.children.map((child) => (
+                                                <Link
+                                                    key={child.name}
+                                                    href={child.href}
+                                                    onClick={() => setIsOpen(false)}
+                                                    className="text-lg font-semibold text-white/70 hover:text-accent-yellow transition-colors flex items-center gap-2"
+                                                >
+                                                    <ChevronRight className="w-4 h-4" />
+                                                    {child.name}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             ))}
                             <div className="flex flex-col gap-4 mt-8">
                                 <a
