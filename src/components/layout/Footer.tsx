@@ -2,9 +2,22 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { apiService } from "@/services/api";
 
-const Footer = () => {
+// Shown only when the CMS is unreachable at build time.
+const fallbackServices = [
+    "Pipe Installation",
+    "Jet Grouting Works",
+    "Structural Works",
+    "Road Works",
+    "Earthworks",
+];
+
+const Footer = async () => {
     const currentYear = new Date().getFullYear();
+
+    const servicesRes = await apiService.getServices({ per_page: 100 });
+    const services = servicesRes?.data ?? [];
 
     return (
         <footer className="bg-primary-green text-white pt-20 pb-10">
@@ -38,9 +51,15 @@ const Footer = () => {
                     <div>
                         <h4 className="text-lg font-bold font-heading mb-6 border-l-4 border-accent-yellow pl-4 uppercase tracking-wider">Core Services</h4>
                         <ul className="space-y-4 text-white/70 text-sm">
-                            <li>Building Construction</li>
-                            <li>Civil Engineering</li>
-                            <li>Mechanical & Electrical</li>
+                            {services.length > 0
+                                ? services.map((service) => (
+                                    <li key={service.slug}>
+                                        <Link href={`/services/${service.slug}`} className="hover:text-accent-yellow transition-colors">
+                                            {service.title}
+                                        </Link>
+                                    </li>
+                                ))
+                                : fallbackServices.map((name) => <li key={name}>{name}</li>)}
                         </ul>
                     </div>
 
