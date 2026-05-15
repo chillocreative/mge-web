@@ -59,7 +59,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     { icon: Calendar, label: "Start Date", value: project.start_date },
     { icon: Calendar, label: "Completion Date", value: project.year },
     { icon: Tag, label: "Category", value: project.category },
-    { icon: Briefcase, label: "Client", value: project.client },
+    { icon: Briefcase, label: "Project Owner", value: project.client },
     { icon: DollarSign, label: "Project Value (RM)", value: project.value },
     { icon: FileText, label: "Scope of Work", value: project.scope },
   ].filter((d) => d.value);

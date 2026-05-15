@@ -132,10 +132,10 @@ function mge_register_acf_fields() {
             ),
             array(
                 'key'           => 'field_project_client',
-                'label'         => 'Client',
+                'label'         => 'Project Owner',
                 'name'          => 'project_client',
                 'type'          => 'text',
-                'instructions'  => 'Client or agency name (e.g., "SAJ Ranhill").',
+                'instructions'  => 'Project owner or agency name (e.g., "SAJ Ranhill").',
             ),
             array(
                 'key'           => 'field_project_value',

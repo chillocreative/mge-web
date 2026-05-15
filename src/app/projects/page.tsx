@@ -90,7 +90,7 @@ const ProjectsPage = async () => {
                         <thead>
                             <tr className="bg-gray-200 text-gray-600 uppercase text-xs tracking-wider">
                                 <th className="py-3 px-6 text-left">Project Name</th>
-                                <th className="py-3 px-6 text-left">Client</th>
+                                <th className="py-3 px-6 text-left">Project Owner</th>
                                 <th className="py-3 px-6 text-right">Amount (RM)</th>
                                 <th className="py-3 px-6 text-left">Start Date</th>
                                 <th className="py-3 px-6 text-left">Completion Date</th>
@@ -112,7 +112,7 @@ const ProjectsPage = async () => {
                         <thead>
                             <tr className="bg-gray-200 text-gray-600 uppercase text-xs tracking-wider">
                                 <th className="py-3 px-6 text-left">Project Name</th>
-                                <th className="py-3 px-6 text-left">Client</th>
+                                <th className="py-3 px-6 text-left">Project Owner</th>
                                 <th className="py-3 px-6 text-right">Amount (RM)</th>
                                 <th className="py-3 px-6 text-left">Start Date</th>
                                 <th className="py-3 px-6 text-left">Completion Date</th>
