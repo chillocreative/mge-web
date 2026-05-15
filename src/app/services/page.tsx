@@ -5,7 +5,7 @@ import Section from "@/components/layout/Section";
 import Heading from "@/components/ui/Heading";
 import { constructMetadata } from "@/lib/metadata";
 import ServiceCard from "@/components/modules/ServiceCard";
-import { HardHat, Wrench, Truck, Shovel, Construction } from "lucide-react";
+import { Truck, Shovel, Container, Caravan, PaintRoller, Construction, Forklift, Waypoints, Tractor, Pickaxe, Cylinder, Drill, Droplets, Cog, Box } from "lucide-react";
 import { apiService } from "@/services/api";
 
 export const metadata = constructMetadata({
@@ -40,14 +40,29 @@ const fallbackServices = [
     },
 ];
 
+// Fleet inventory tallied from the company profile machinery list (183 units).
 const machinery = [
-    { name: "Excavators", icon: Shovel },
-    { name: "Mining & Tipper Trucks", icon: Truck },
-    { name: "Bulldozers", icon: Construction },
-    { name: "Compactors", icon: Wrench },
-    { name: "Tractors & Backhoes", icon: HardHat },
-    { name: "Tunnel Boring Machines", icon: Shovel },
+    { name: "Mining Truck", count: 78, icon: Truck },
+    { name: "Excavator", count: 33, icon: Shovel },
+    { name: "Tipper Lorry", count: 14, icon: Container },
+    { name: "Rigid Lorry (Hino)", count: 9, icon: Caravan },
+    { name: "Compactor", count: 8, icon: PaintRoller },
+    { name: "Bulldozer", count: 7, icon: Construction },
+    { name: "Dump Truck", count: 6, icon: Truck },
+    { name: "Forklift", count: 6, icon: Forklift },
+    { name: "Motor Grader", count: 4, icon: Waypoints },
+    { name: "Tractor", count: 4, icon: Tractor },
+    { name: "Backhoe", count: 3, icon: Pickaxe },
+    { name: "Mini Excavator", count: 2, icon: Shovel },
+    { name: "Tunnel Boring Machine", count: 2, icon: Cylinder },
+    { name: "Jet Grouting Rig", count: 2, icon: Drill },
+    { name: "Water Well Drilling Rig", count: 2, icon: Droplets },
+    { name: "Lorry-Mounted Crane", count: 1, icon: Cog },
+    { name: "Semi Trailer", count: 1, icon: Box },
+    { name: "Prime Mover", count: 1, icon: Truck },
 ];
+
+const totalMachinery = machinery.reduce((sum, item) => sum + item.count, 0);
 
 const ServicesPage = async () => {
     const servicesRes = await apiService.getServices({ per_page: 100 });
@@ -106,16 +121,24 @@ const ServicesPage = async () => {
                         Our extensive fleet of heavy machinery and equipment ensures that we have the right tools for any project, guaranteeing efficiency and quality from the ground up.
                     </p>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-12">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
                     {machinery.map((item) => {
                         const Icon = item.icon;
                         return (
-                            <div key={item.name} className="bg-white p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300">
-                                <Icon className="w-10 h-10 text-primary-green mx-auto mb-4" />
-                                <h4 className="font-semibold text-gray-800">{item.name}</h4>
+                            <div key={item.name} className="bg-white p-6 shadow-lg text-center hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+                                <Icon className="w-10 h-10 text-primary-green mb-4" />
+                                <h4 className="font-semibold text-gray-800 leading-tight">{item.name}</h4>
+                                <span className="mt-3 text-3xl font-bold font-heading text-primary-green">{item.count}</span>
+                                <span className="text-[11px] font-bold uppercase tracking-widest text-gray-400">{item.count > 1 ? "Units" : "Unit"}</span>
                             </div>
                         );
                     })}
+                </div>
+
+                <div className="mt-10 text-center">
+                    <span className="inline-block bg-primary-green text-white px-8 py-4 font-heading font-bold uppercase tracking-widest text-sm">
+                        Total Fleet: {totalMachinery} Units
+                    </span>
                 </div>
             </Section>
 
