@@ -87,10 +87,9 @@ export default async function Home() {
         <div className="mt-12 text-center">
           <Link
             href="/services"
-            className="inline-flex items-center gap-4 bg-primary-green text-white px-10 py-5 font-bold uppercase tracking-[0.2em] hover:bg-opacity-90 transition-all duration-300"
+            className="text-xs font-bold uppercase tracking-[0.2em] text-primary-green hover:text-accent-yellow border-b-2 border-accent-yellow pb-2 transition-all"
           >
             View All Services
-            <ArrowUpRight className="w-5 h-5" />
           </Link>
         </div>
       </Section>
