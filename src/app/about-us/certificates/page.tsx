@@ -1,11 +1,25 @@
 import React from "react";
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Section from "@/components/layout/Section";
 import Heading from "@/components/ui/Heading";
 import { constructMetadata } from "@/lib/metadata";
-import { Building2, BadgeCheck, Star, ShieldCheck, ClipboardCheck, Landmark, RadioTower, ArrowLeft } from "lucide-react";
+import {
+    Building2,
+    BadgeCheck,
+    Star,
+    ShieldCheck,
+    ClipboardCheck,
+    Landmark,
+    RadioTower,
+    Award,
+    FileCheck,
+    ScrollText,
+    ArrowLeft,
+} from "lucide-react";
+import { apiService, type Certificate } from "@/services/api";
 
 export const metadata = constructMetadata({
     title: "Certificates | Multi Green Engineering Sdn Bhd",
@@ -13,11 +27,31 @@ export const metadata = constructMetadata({
         "Official certifications and registrations held by Multi Green Engineering Sdn Bhd — CIDB Grade G7, ISO 9001:2015, PKK Bumiputera status, and TM registered supplier.",
 });
 
-const certificates = [
+// Map the icon slug chosen in WordPress to a Lucide component.
+// Keep keys in sync with the ACF "Icon" choices in
+// mge-headless-core/includes/acf-fields.php (group_mge_certificate).
+const ICON_MAP: Record<string, LucideIcon> = {
+    building: Building2,
+    "badge-check": BadgeCheck,
+    star: Star,
+    "shield-check": ShieldCheck,
+    "clipboard-check": ClipboardCheck,
+    landmark: Landmark,
+    "radio-tower": RadioTower,
+    award: Award,
+    "file-check": FileCheck,
+    "scroll-text": ScrollText,
+};
+
+// Shown only when the CMS is unreachable or has no certificates yet.
+// Mirrors the credentials documented in the company profile.
+const fallbackCertificates: Certificate[] = [
     {
-        icon: Building2,
+        id: 1,
+        title: "Form 13 — Certificate of Incorporation",
+        slug: "form-13",
+        icon: "building",
         category: "Incorporation",
-        name: "Form 13 — Certificate of Incorporation",
         issuer: "Companies Commission of Malaysia (SSM)",
         summary:
             "Certifies the incorporation and change of company name to Multi Green Engineering Sdn. Bhd. under the Companies Act 2016.",
@@ -27,11 +61,14 @@ const certificates = [
             { label: "Issued", value: "8 September 2025" },
         ],
         status: "Registered company since 2014",
+        display_order: 1,
     },
     {
-        icon: BadgeCheck,
+        id: 2,
+        title: "ISO 9001:2015 Certification",
+        slug: "iso-9001-2015",
+        icon: "badge-check",
         category: "Quality Management",
-        name: "ISO 9001:2015 Certification",
         issuer: "LMS Assessments Limited",
         summary:
             "Certifies that the quality management system for the construction of civil engineering and building services conforms to the ISO 9001:2015 standard.",
@@ -41,11 +78,14 @@ const certificates = [
             { label: "Recertification", value: "11 April 2028" },
         ],
         status: "Valid through 11 April 2028",
+        display_order: 2,
     },
     {
-        icon: Star,
+        id: 3,
+        title: "CIDB SCORE — Certificate of Achievement",
+        slug: "cidb-score",
+        icon: "star",
         category: "Capability Rating",
-        name: "CIDB SCORE — Certificate of Achievement",
         issuer: "CIDB Malaysia & SME Corp Malaysia",
         summary:
             "Awards a 3-Star SCORE rating, recognising the company's management and technical capability, best-practice compliance, and project management.",
@@ -55,11 +95,14 @@ const certificates = [
             { label: "Assessment Year", value: "2025" },
         ],
         status: "Valid until 1 July 2027",
+        display_order: 3,
     },
     {
-        icon: ShieldCheck,
+        id: 4,
+        title: "PKK Sijil Taraf Bumiputera",
+        slug: "pkk-taraf-bumiputera",
+        icon: "shield-check",
         category: "Bumiputera Status",
-        name: "PKK Sijil Taraf Bumiputera",
         issuer: "Pusat Khidmat Kontraktor (KUSKOP)",
         summary:
             "Recognises Multi Green Engineering as a Bumiputera-status work contractor, eligible for Bumiputera-allocated government tenders.",
@@ -69,11 +112,14 @@ const certificates = [
             { label: "Valid Until", value: "2 January 2029" },
         ],
         status: "Valid until 2 January 2029",
+        display_order: 4,
     },
     {
-        icon: ClipboardCheck,
+        id: 5,
+        title: "CIDB Perakuan Pendaftaran Kontraktor (PPK)",
+        slug: "cidb-ppk",
+        icon: "clipboard-check",
         category: "Contractor Registration",
-        name: "CIDB Perakuan Pendaftaran Kontraktor (PPK)",
         issuer: "CIDB Malaysia",
         summary:
             "Registers the company as a Grade G7 contractor authorised to undertake construction projects of unlimited value across building, civil, and M&E works.",
@@ -83,11 +129,14 @@ const certificates = [
             { label: "Status", value: "Active" },
         ],
         status: "Active · valid until 2 January 2029",
+        display_order: 5,
     },
     {
-        icon: Landmark,
+        id: 6,
+        title: "CIDB Sijil Perolehan Kerja Kerajaan (SPPK)",
+        slug: "cidb-sppk",
+        icon: "landmark",
         category: "Government Procurement",
-        name: "CIDB Sijil Perolehan Kerja Kerajaan (SPPK)",
         issuer: "CIDB Malaysia",
         summary:
             "Certifies eligibility to tender for and carry out Malaysian government construction works in the building, civil engineering, and mechanical & electrical categories.",
@@ -97,11 +146,14 @@ const certificates = [
             { label: "Grade", value: "G7" },
         ],
         status: "Valid until 2 January 2029",
+        display_order: 6,
     },
     {
-        icon: RadioTower,
+        id: 7,
+        title: "TM Group Registered Supplier",
+        slug: "tm-group-registered-supplier",
+        icon: "radio-tower",
         category: "Registered Supplier",
-        name: "TM Group Registered Supplier",
         issuer: "Telekom Malaysia Berhad",
         summary:
             "Approved registration as a TM Group Registered Supplier, qualifying the company to provide supplies and services to the TM Group of Companies.",
@@ -110,10 +162,14 @@ const certificates = [
             { label: "Scope", value: "Supplies & services" },
         ],
         status: "Approved supplier since 2019",
+        display_order: 7,
     },
 ];
 
-const CertificatesPage = () => {
+const CertificatesPage = async () => {
+    const res = await apiService.getCertificates({ per_page: 100 });
+    const certificates = res?.data?.length ? res.data : fallbackCertificates;
+
     return (
         <main className="min-h-screen bg-gray-50">
             <Navbar />
@@ -146,10 +202,10 @@ const CertificatesPage = () => {
             <Section>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {certificates.map((cert) => {
-                        const Icon = cert.icon;
+                        const Icon = ICON_MAP[cert.icon] ?? Award;
                         return (
                             <div
-                                key={cert.name}
+                                key={cert.id}
                                 className="bg-white shadow-lg border-t-4 border-primary-green flex flex-col hover:shadow-xl transition-shadow duration-300"
                             >
                                 <div className="p-8 flex-1">
@@ -162,29 +218,35 @@ const CertificatesPage = () => {
                                                 {cert.category}
                                             </span>
                                             <h3 className="font-heading font-bold text-lg text-gray-800 leading-tight mt-1">
-                                                {cert.name}
+                                                {cert.title}
                                             </h3>
                                             <p className="text-sm text-gray-500 mt-1">{cert.issuer}</p>
                                         </div>
                                     </div>
-                                    <p className="text-gray-600 text-sm leading-relaxed mt-5">{cert.summary}</p>
-                                    <dl className="mt-6 border-t border-gray-100 pt-4 space-y-2.5">
-                                        {cert.details.map((d) => (
-                                            <div key={d.label} className="flex justify-between gap-4 text-sm">
-                                                <dt className="text-gray-400 uppercase text-[11px] tracking-wider font-bold shrink-0 pt-0.5">
-                                                    {d.label}
-                                                </dt>
-                                                <dd className="text-gray-700 font-semibold text-right">{d.value}</dd>
-                                            </div>
-                                        ))}
-                                    </dl>
+                                    {cert.summary && (
+                                        <p className="text-gray-600 text-sm leading-relaxed mt-5">{cert.summary}</p>
+                                    )}
+                                    {cert.details.length > 0 && (
+                                        <dl className="mt-6 border-t border-gray-100 pt-4 space-y-2.5">
+                                            {cert.details.map((d, i) => (
+                                                <div key={`${d.label}-${i}`} className="flex justify-between gap-4 text-sm">
+                                                    <dt className="text-gray-400 uppercase text-[11px] tracking-wider font-bold shrink-0 pt-0.5">
+                                                        {d.label}
+                                                    </dt>
+                                                    <dd className="text-gray-700 font-semibold text-right">{d.value}</dd>
+                                                </div>
+                                            ))}
+                                        </dl>
+                                    )}
                                 </div>
-                                <div className="bg-industrial px-8 py-3.5 flex items-center gap-2 border-t border-gray-100">
-                                    <BadgeCheck className="w-4 h-4 text-primary-green shrink-0" />
-                                    <span className="text-xs font-bold text-primary-green uppercase tracking-wide">
-                                        {cert.status}
-                                    </span>
-                                </div>
+                                {cert.status && (
+                                    <div className="bg-industrial px-8 py-3.5 flex items-center gap-2 border-t border-gray-100">
+                                        <BadgeCheck className="w-4 h-4 text-primary-green shrink-0" />
+                                        <span className="text-xs font-bold text-primary-green uppercase tracking-wide">
+                                            {cert.status}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}

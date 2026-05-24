@@ -130,6 +130,45 @@ function mge_register_rest_fields() {
     ));
 
     // ----------------------------------------------------------
+    // CERTIFICATES: Add ACF fields to REST response
+    // ----------------------------------------------------------
+    register_rest_field( 'mge_certificate', 'acf', array(
+        'get_callback' => function ( $post ) {
+            $fields = get_fields( $post['id'] );
+            if ( ! $fields ) {
+                return array();
+            }
+
+            $details = array();
+            foreach ( $fields['cert_details'] ?? array() as $row ) {
+                $label = trim( (string) ( $row['detail_label'] ?? '' ) );
+                $value = trim( (string) ( $row['detail_value'] ?? '' ) );
+                if ( $label === '' && $value === '' ) {
+                    continue;
+                }
+                $details[] = array(
+                    'label' => $label,
+                    'value' => $value,
+                );
+            }
+
+            return array(
+                'icon'          => $fields['cert_icon'] ?? 'award',
+                'category'      => $fields['cert_category'] ?? '',
+                'issuer'        => $fields['cert_issuer'] ?? '',
+                'summary'       => $fields['cert_summary'] ?? '',
+                'details'       => $details,
+                'status'        => $fields['cert_status'] ?? '',
+                'display_order' => (int) ( $fields['cert_order'] ?? 0 ),
+            );
+        },
+        'schema' => array(
+            'type'        => 'object',
+            'description' => 'Certificate custom fields',
+        ),
+    ));
+
+    // ----------------------------------------------------------
     // ALL CPTs: Add featured image URL to REST response
     // ----------------------------------------------------------
     $cpts = array( 'mge_service', 'mge_project', 'mge_gallery' );
@@ -225,6 +264,22 @@ add_action( 'rest_api_init', function () {
             ),
             'project_id' => array(
                 'default'           => '',
+                'sanitize_callback' => 'absint',
+            ),
+        ),
+    ));
+
+    register_rest_route( 'mge/v1', '/certificates', array(
+        'methods'             => 'GET',
+        'callback'            => 'mge_api_get_certificates',
+        'permission_callback' => '__return_true',
+        'args'                => array(
+            'per_page' => array(
+                'default'           => 50,
+                'sanitize_callback' => 'absint',
+            ),
+            'page' => array(
+                'default'           => 1,
                 'sanitize_callback' => 'absint',
             ),
         ),
@@ -500,6 +555,75 @@ function mge_api_get_gallery( WP_REST_Request $request ) {
 
     return new WP_REST_Response( array(
         'data'  => $gallery_items,
+        'total' => (int) $query->found_posts,
+        'pages' => (int) $query->max_num_pages,
+        'page'  => $page,
+    ), 200 );
+}
+
+/**
+ * Certificates endpoint callback.
+ *
+ * Same caveat as services: don't gate the query on `cert_order` meta
+ * key existing, or freshly created certificates with the default 0
+ * order will get dropped by the inner-join. Fetch all and sort in PHP.
+ */
+function mge_api_get_certificates( WP_REST_Request $request ) {
+    $per_page = $request->get_param( 'per_page' );
+    $page     = $request->get_param( 'page' );
+
+    $query = new WP_Query( array(
+        'post_type'      => 'mge_certificate',
+        'posts_per_page' => $per_page,
+        'paged'          => $page,
+        'post_status'    => 'publish',
+        'orderby'        => 'date',
+        'order'          => 'ASC',
+    ));
+
+    $posts = $query->posts;
+    usort( $posts, function ( $a, $b ) {
+        $a_order = (int) get_post_meta( $a->ID, 'cert_order', true );
+        $b_order = (int) get_post_meta( $b->ID, 'cert_order', true );
+        if ( $a_order === $b_order ) {
+            return strtotime( $a->post_date ) <=> strtotime( $b->post_date );
+        }
+        return $a_order <=> $b_order;
+    });
+
+    $certificates = array();
+    foreach ( $posts as $post ) {
+        $fields = get_fields( $post->ID );
+
+        $details = array();
+        foreach ( $fields['cert_details'] ?? array() as $row ) {
+            $label = trim( (string) ( $row['detail_label'] ?? '' ) );
+            $value = trim( (string) ( $row['detail_value'] ?? '' ) );
+            if ( $label === '' && $value === '' ) {
+                continue;
+            }
+            $details[] = array(
+                'label' => $label,
+                'value' => $value,
+            );
+        }
+
+        $certificates[] = array(
+            'id'            => $post->ID,
+            'title'         => $post->post_title,
+            'slug'          => $post->post_name,
+            'icon'          => $fields['cert_icon'] ?? 'award',
+            'category'      => $fields['cert_category'] ?? '',
+            'issuer'        => $fields['cert_issuer'] ?? '',
+            'summary'       => $fields['cert_summary'] ?? '',
+            'details'       => $details,
+            'status'        => $fields['cert_status'] ?? '',
+            'display_order' => (int) ( $fields['cert_order'] ?? 0 ),
+        );
+    }
+
+    return new WP_REST_Response( array(
+        'data'  => $certificates,
         'total' => (int) $query->found_posts,
         'pages' => (int) $query->max_num_pages,
         'page'  => $page,

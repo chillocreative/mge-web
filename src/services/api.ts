@@ -141,6 +141,24 @@ export interface GalleryItem {
     category: string[];
 }
 
+export interface CertificateDetail {
+    label: string;
+    value: string;
+}
+
+export interface Certificate {
+    id: number;
+    title: string;
+    slug: string;
+    icon: string;
+    category: string;
+    issuer: string;
+    summary: string;
+    details: CertificateDetail[];
+    status: string;
+    display_order: number;
+}
+
 export interface PaginatedResponse<T> {
     data: T[];
     total: number;
@@ -263,6 +281,20 @@ export const apiService = {
             const response = await mgeClient.get("/gallery", { params });
             const data = response.data as PaginatedResponse<GalleryItem>;
             data.data = data.data.map((g) => decodeFields(g, ["title", "caption"]));
+            return data;
+        } catch (error) {
+            return handleApiError(error as AxiosError);
+        }
+    },
+
+    /**
+     * Fetch all certificates.
+     */
+    async getCertificates(params?: { per_page?: number; page?: number }): Promise<PaginatedResponse<Certificate> | null> {
+        try {
+            const response = await mgeClient.get("/certificates", { params });
+            const data = response.data as PaginatedResponse<Certificate>;
+            data.data = data.data.map((c) => decodeFields(c, ["title", "category", "issuer", "summary", "status"]));
             return data;
         } catch (error) {
             return handleApiError(error as AxiosError);

@@ -237,6 +237,114 @@ function mge_register_acf_fields() {
     ));
 
     // ============================================================
+    // CERTIFICATE FIELDS
+    // ============================================================
+    acf_add_local_field_group( array(
+        'key'      => 'group_mge_certificate',
+        'title'    => 'Certificate Details',
+        'fields'   => array(
+            array(
+                'key'           => 'field_cert_icon',
+                'label'         => 'Icon',
+                'name'          => 'cert_icon',
+                'type'          => 'select',
+                'instructions'  => 'Visual icon shown on the certificate card.',
+                'choices'       => array(
+                    'building'         => 'Building (Incorporation / Corporate)',
+                    'badge-check'      => 'Badge Check (Quality / Standards)',
+                    'star'             => 'Star (Rating / Achievement)',
+                    'shield-check'     => 'Shield Check (Status / Trust)',
+                    'clipboard-check'  => 'Clipboard Check (Registration)',
+                    'landmark'         => 'Landmark (Government / Procurement)',
+                    'radio-tower'      => 'Radio Tower (Telecommunications)',
+                    'award'            => 'Award (Generic Certificate)',
+                    'file-check'       => 'File Check (Document Approval)',
+                    'scroll-text'      => 'Scroll Text (Official Letter)',
+                ),
+                'default_value' => 'award',
+                'required'      => 1,
+            ),
+            array(
+                'key'           => 'field_cert_category',
+                'label'         => 'Category',
+                'name'          => 'cert_category',
+                'type'          => 'text',
+                'instructions'  => 'Short category label shown above the certificate name (e.g., "Quality Management").',
+                'required'      => 1,
+            ),
+            array(
+                'key'           => 'field_cert_issuer',
+                'label'         => 'Issuer',
+                'name'          => 'cert_issuer',
+                'type'          => 'text',
+                'instructions'  => 'Issuing authority (e.g., "CIDB Malaysia").',
+                'required'      => 1,
+            ),
+            array(
+                'key'           => 'field_cert_summary',
+                'label'         => 'Summary',
+                'name'          => 'cert_summary',
+                'type'          => 'textarea',
+                'instructions'  => 'One- or two-sentence description of what the certificate certifies.',
+                'rows'          => 3,
+                'required'      => 1,
+            ),
+            array(
+                'key'           => 'field_cert_details',
+                'label'         => 'Details',
+                'name'          => 'cert_details',
+                'type'          => 'repeater',
+                'instructions'  => 'Key facts shown as label/value rows on the card (e.g., Certificate No., Registered, Valid Until).',
+                'min'           => 0,
+                'max'           => 6,
+                'layout'        => 'table',
+                'sub_fields'    => array(
+                    array(
+                        'key'   => 'field_cert_detail_label',
+                        'label' => 'Label',
+                        'name'  => 'detail_label',
+                        'type'  => 'text',
+                    ),
+                    array(
+                        'key'   => 'field_cert_detail_value',
+                        'label' => 'Value',
+                        'name'  => 'detail_value',
+                        'type'  => 'text',
+                    ),
+                ),
+            ),
+            array(
+                'key'           => 'field_cert_status',
+                'label'         => 'Status / Validity',
+                'name'          => 'cert_status',
+                'type'          => 'text',
+                'instructions'  => 'Short status banner shown at the bottom of the card (e.g., "Valid until 2 January 2029").',
+            ),
+            array(
+                'key'           => 'field_cert_order',
+                'label'         => 'Display Order',
+                'name'          => 'cert_order',
+                'type'          => 'number',
+                'instructions'  => 'Controls the order certificates appear on the page (lower numbers first).',
+                'default_value' => 0,
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'post_type',
+                    'operator' => '==',
+                    'value'    => 'mge_certificate',
+                ),
+            ),
+        ),
+        'menu_order' => 0,
+        'style'      => 'default',
+        'position'   => 'normal',
+        'active'     => true,
+    ));
+
+    // ============================================================
     // GALLERY FIELDS
     // ============================================================
     acf_add_local_field_group( array(
@@ -299,7 +407,7 @@ function mge_register_acf_fields() {
  * under the Gutenberg editor. ACF renders fields in the document sidebar.
  */
 function mge_managed_cpts() {
-    return array( 'mge_service', 'mge_project', 'mge_gallery' );
+    return array( 'mge_service', 'mge_project', 'mge_gallery', 'mge_certificate' );
 }
 
 /**
@@ -329,3 +437,4 @@ add_action( 'admin_menu', function () {
 add_filter( 'get_user_option_meta-box-order_mge_service', '__return_false' );
 add_filter( 'get_user_option_meta-box-order_mge_project', '__return_false' );
 add_filter( 'get_user_option_meta-box-order_mge_gallery', '__return_false' );
+add_filter( 'get_user_option_meta-box-order_mge_certificate', '__return_false' );
