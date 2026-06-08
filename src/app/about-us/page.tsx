@@ -123,7 +123,7 @@ const AboutPage = () => {
         {/* Featured leader */}
         <div className="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-8 md:gap-14 items-center pb-14 mb-14 border-b border-primary/15">
           <div className="flex justify-center md:justify-start">
-            <div className="w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden">
+            <div className="w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden ring-4 ring-white shadow-lg">
               <img src={lead.image} alt={lead.name} className="w-full h-full object-cover" />
             </div>
           </div>
@@ -141,7 +141,7 @@ const AboutPage = () => {
         <div className="flex flex-wrap justify-center gap-x-10 gap-y-14">
           {members.map((member) => (
             <div key={member.name} className="w-full sm:w-[44%] lg:w-[29%] flex flex-col items-center text-center">
-              <div className="w-40 h-40 rounded-full overflow-hidden mb-5">
+              <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-white shadow-lg mb-5">
                 <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
               </div>
               <h4 className="text-base font-bold text-primary leading-tight">{member.name}</h4>
