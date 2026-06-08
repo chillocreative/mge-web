@@ -108,45 +108,45 @@ const AboutPage = () => {
       </Section>
       
       {/* Team Section */}
-      <Section>
-        <div className="max-w-4xl mx-auto text-center mb-12">
+      <Section className="bg-[#abb3b6]">
+        <div className="max-w-4xl mx-auto text-center mb-14">
             <div className="flex items-center gap-3 mb-4 justify-center">
-              <div className="w-10 h-[2px] bg-accent-yellow" />
-              <span className="text-accent-yellow font-bold uppercase tracking-widest text-sm">Our Leaders</span>
-              <div className="w-10 h-[2px] bg-accent-yellow" />
+              <div className="w-10 h-[2px] bg-primary-green/40" />
+              <span className="text-primary-green font-bold uppercase tracking-widest text-sm">Our Leaders</span>
+              <div className="w-10 h-[2px] bg-primary-green/40" />
             </div>
-            <Heading level={2} className="uppercase tracking-tight">
+            <Heading level={2} className="uppercase tracking-tight text-primary">
                 The <span className="text-primary-green italic">Management</span> Team
             </Heading>
         </div>
+
         {/* Featured leader */}
-        <div className="bg-white shadow-lg border-t-4 border-primary-green mb-10 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 md:p-10 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[16rem_1fr] gap-8 md:gap-14 items-center pb-14 mb-14 border-b border-primary/15">
           <div className="flex justify-center md:justify-start">
-            <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden bg-gray-100 ring-4 ring-primary-green/10 shadow-md">
+            <div className="w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden">
               <img src={lead.image} alt={lead.name} className="w-full h-full object-cover" />
             </div>
           </div>
-          <div className="md:col-span-2 text-center md:text-left">
-            <h3 className="text-xl md:text-2xl font-bold text-primary-green">{lead.name}</h3>
-            <span className="inline-block bg-industrial text-primary-green text-[11px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mt-2 mb-4">
-              {lead.position}
-            </span>
-            <p className="text-gray-600 text-sm leading-relaxed">{lead.bio}</p>
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl md:text-3xl font-bold text-primary tracking-tight">{lead.name}</h3>
+            <div className="flex items-center gap-2.5 justify-center md:justify-start mt-3 mb-5">
+              <span className="w-7 h-[2px] bg-primary-green" />
+              <span className="text-primary-green text-xs font-bold uppercase tracking-[0.2em]">{lead.position}</span>
+            </div>
+            <p className="text-gray-700 leading-relaxed max-w-2xl">{lead.bio}</p>
           </div>
         </div>
 
         {/* Management team */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex flex-wrap justify-center gap-x-10 gap-y-14">
           {members.map((member) => (
-            <div key={member.name} className="bg-white p-6 shadow-md flex flex-col items-center text-center">
-              <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 ring-4 ring-primary-green/10 shadow-sm mb-4">
+            <div key={member.name} className="w-full sm:w-[44%] lg:w-[29%] flex flex-col items-center text-center">
+              <div className="w-40 h-40 rounded-full overflow-hidden mb-5">
                 <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
               </div>
-              <h4 className="font-bold text-primary-green leading-tight">{member.name}</h4>
-              <span className="inline-block bg-industrial text-primary-green text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mt-2 mb-3">
-                {member.position}
-              </span>
-              <p className="text-gray-600 text-xs leading-relaxed">{member.bio}</p>
+              <h4 className="text-base font-bold text-primary leading-tight">{member.name}</h4>
+              <span className="text-[11px] font-bold text-primary-green uppercase tracking-[0.18em] mt-2 mb-3">{member.position}</span>
+              <p className="text-[13px] text-gray-700 leading-relaxed">{member.bio}</p>
             </div>
           ))}
         </div>
